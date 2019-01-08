@@ -1,0 +1,59 @@
+<script type="text/javascript">
+    RED.nodes.registerType('amazon-echo-hub',{
+        category: "input",
+        color: "#31C4F3",
+        defaults: {
+            hubname: {value:"Amazon Echo Hub", required:true},
+            enableinput: {value:false}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "amazon-echo-hub.png",
+        label: function() {
+            return this.hubname;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="amazon-echo-hub">
+    <div class="form-row">
+        <label for="node-input-enableinput"><i class="fa fa-tag"></i> Enable Input</label>
+        <input type="checkbox" id="node-input-enableinput">
+    </div>
+    <div class="form-tips">Enable execution of this node via <strong>Input</strong> signal.</div>
+</script>
+
+<script type="text/x-red" data-help-name="amazon-echo-hub">
+    <p>Amazon Echo Hub</p>
+</script>
+
+
+<script type="text/javascript">
+    RED.nodes.registerType('amazon-echo-device',{
+        category: "input",
+        color: "#31C4F3",
+        defaults: {
+            name: {value:"", required:true},
+            topic: {value:"", required:false},
+        },
+        inputs:1,
+        outputs:1,
+        icon: "amazon-echo-device.png",
+        label: function() {
+            return this.name || "Amazon Echo Device";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="amazon-echo-device">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Bedroom light">
+    </div>
+    <div class="form-tips">Alexa uses this <strong>Name</strong> to indentify your device by voice. This has to be unique for each device. If you have renamed your device, please ask Alexa to discover again.</div>
+    <p></p>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
+        <input type="text" id="node-input-topic">
+    </div>
+</script>

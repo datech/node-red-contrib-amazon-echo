@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Creator: CorelDRAW X6 -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xml:space="preserve"
+   width="20"
+   height="30"
+   version="1.1"
+   style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+   viewBox="0 0 222.26439 333.41642"
+   id="svg4359"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="alexa-local-hub.svg"
+   inkscape:export-filename="/Users/teodor/Work/git/node-red-contrib-alexa-local-hub/icons/alexa-local-hub.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"><metadata
+     id="metadata4373"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1413"
+     inkscape:window-height="804"
+     id="namedview4371"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="3.5690056"
+     inkscape:cx="60.27446"
+     inkscape:cy="39.206952"
+     inkscape:window-x="13"
+     inkscape:window-y="137"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4359" /><defs
+     id="defs4361"><style
+       type="text/css"
+       id="style4363"><![CDATA[
+    .fil0 {fill:#FEFEFE}
+    .fil1 {fill:#FEFEFE;fill-rule:nonzero}
+   ]]></style></defs><g
+     id="Layer_x0020_1"
+     style="fill:#ffffff"
+     transform="matrix(0.1231455,0,0,0.1231455,-0.00661802,55.507814)"><metadata
+       id="CorelCorpID_0Corel-Layer" /><path
+       class="fil0"
+       d="M 902,0 C 404,0 0,404 0,902 l 0,1 c 0,458 341,836 782,894 l 0,-182 c 0,-51 -32,-97 -81,-114 -255,-86 -437,-329 -430,-614 8,-347 291,-620 638,-617 346,4 625,285 625,632 0,8 0,16 0,24 0,2 0,4 0,5 0,7 -1,15 -1,22 0,2 0,5 -1,7 0,5 -1,10 -2,15 -1,6 -1,11 -2,17 0,3 -1,5 -1,8 -77,510 -741,796 -744,798 39,5 79,8 120,8 498,0 902,-404 902,-903 C 1805,404 1401,0 903,0 Z"
+       id="path4367"
+       style="fill:#ffffff"
+       inkscape:connector-curvature="0" /><path
+       class="fil1"
+       d="m 0,902 0,1 c 0,458 341,836 782,894 l 0,-182 c 0,-51 -32,-97 -81,-114 -255,-86 -437,-329 -430,-614 8,-347 291,-620 638,-617 346,4 625,285 625,632 0,8 0,16 0,24 0,2 0,4 0,5 0,7 -1,15 -1,22 0,2 0,5 -1,7 0,5 -1,10 -2,15 -1,6 -1,11 -2,17 0,3 -1,5 -1,8 -77,510 -741,796 -744,798 39,5 79,8 120,8 489,0 887,-389 902,-874 l 0,-57 C 1790,390 1392,1 903,1 l 0,0 C 405,1 1,405 1,903 Z"
+       id="path4369"
+       style="fill:#ffffff;fill-rule:nonzero"
+       inkscape:connector-curvature="0" /></g></svg>

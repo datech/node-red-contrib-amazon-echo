@@ -1,0 +1,26 @@
+{
+  "state": {
+      "on": {{ on }},
+      "bri": {{ bri }},
+      "hue": {{ hue }},
+      "sat": {{ sat }},
+      "effect": "none",
+      "xy": [
+          0.0,
+          0.0
+      ],
+      "ct": {{ ct }},
+      "alert": "none",
+      "colormode": "{{ colormode }}",
+      "mode": "homeautomation",
+      "reachable": true
+  },
+  "swupdate": {
+      "state": "noupdates",
+      "lastinstall": "2018-01-02T19:24:20"
+  },
+  "type": "Extended color light",
+  "name": "{{ name }}",
+  "modelid": "LCT007",
+  "swversion": "5.105.0.21169"
+}
