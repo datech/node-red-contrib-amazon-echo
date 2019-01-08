@@ -38,4 +38,4 @@ Install using npm
   *  Alexa, lower Bedroom light by 15%
 
 ## Bugs and feature requests
-Please create an issue in [Github](https://github.com/datech/node-red-contrib-amazon-echo/issues)
+Please create an issue in [GitHub](https://github.com/datech/node-red-contrib-amazon-echo/issues)
