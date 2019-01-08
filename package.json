@@ -3,14 +3,10 @@
   "version": "0.1.0",
   "description": "Alexa controlled Node-Red nodes supporting latest Amazon Echo devices",
   "main": "index.js",
-  "homepage": "",
-  "bugs": {
-    "url": "",
-    "email": ""
-  },
+  "homepage": "https://github.com/datech/node-red-contrib-amazon-echo",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/datech/node-red-contrib-amazon-echo.git"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -24,7 +20,7 @@
     "hue",
     "emulator"
   ],
-  "author": "",
+  "author": "Teodor Ivanov <npm@datech.org>",
   "license": "MIT",
   "node-red": {
     "nodes": {
