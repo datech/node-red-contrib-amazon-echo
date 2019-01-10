@@ -26,7 +26,7 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var hubNode = this;
 
-        var port = 80;
+        var port = config.port > 0 && config.port < 65536 ? config.port : 80;
 
         // Start SSPD service
         sspd(hubNode, port, config);

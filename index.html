@@ -3,24 +3,40 @@
         category: "input",
         color: "#31C4F3",
         defaults: {
-            hubname: {value:"Amazon Echo Hub", required:true},
+            port: {value:"80", required:true, validate:
+              function(port) {
+                return port > 0 && port < 65536;
+              }
+            },
             enableinput: {value:false}
         },
         inputs:1,
         outputs:1,
         icon: "amazon-echo-hub.png",
         label: function() {
-            return this.hubname;
+            return "Amazon Echo Hub";
         }
     });
 </script>
 
 <script type="text/x-red" data-template-name="amazon-echo-hub">
     <div class="form-row">
+        <label for="node-input-port"><i class="fa fa-globe"></i> Port</label>
+        <input type="text" id="node-input-port" placeholder="80">
+    </div>
+    <div class="form-row">
         <label for="node-input-enableinput"><i class="fa fa-tag"></i> Enable Input</label>
         <input type="checkbox" id="node-input-enableinput">
     </div>
-    <div class="form-tips">Enable execution of this node via <strong>Input</strong> signal.</div>
+    <div class="form-tips">
+      Tips:
+      <p>
+        <ul>
+          <li>Set port to <strong>80</strong> if you have latest generation Amazon Echo devices.</li>
+          <li>Enable input if you want to send signal to Amazon Echo Hub.</li>
+        </ul>
+      </p>
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="amazon-echo-hub">
