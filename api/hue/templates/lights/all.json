@@ -1,5 +1,5 @@
 {
-  {{#.}}
+  {{#lights}}
     "{{ id }}": {
         "state": {
             "on": {{ on }},
@@ -19,7 +19,7 @@
         },
         "swupdate": {
             "state": "noupdates",
-            "lastinstall": "2018-01-02T19:24:20"
+            "lastinstall": "{{ date }}"
         },
         "type": "Extended color light",
         "name": "{{ name }}",
@@ -61,9 +61,9 @@
             "function": "mixed",
             "direction": "omnidirectional"
         },
-        "uniqueid": "00:17:88:01:00:bd:c7:b9-0b",
+        "uniqueid": "00:11:22:33:44:55:66:77-88",
         "swversion": "5.105.0.21169"
     },
-  {{/.}}
+  {{/lights}}
     "last": {}
 }

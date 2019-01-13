@@ -1,0 +1,47 @@
+{
+   "lights": {{> lightsTemplate }},
+   "groups":{
+   },
+   "config":{
+      "name":"Philips hue",
+      "mac":"00:00:00:aa:bb:cc",
+      "dhcp":true,
+      "ipaddress":"{{ address }}",
+      "netmask":"0.0.0.0",
+      "gateway":"0.0.0.0",
+      "proxyaddress":"",
+      "proxyport":0,
+      "UTC":"{{ date }}",
+      "whitelist":{
+         "{{ username }}":{
+            "last use date":"{{ date }}",
+            "create date":"{{ date }}",
+            "name":"Echo"
+         }
+      },
+      "swversion":"01003372",
+      "swupdate":{
+         "updatestate":0,
+         "url":"",
+         "text":"",
+         "notify":false
+      },
+      "linkbutton":false,
+      "portalservices":false
+   },
+   "swupdate2":{
+      "checkforupdate":false,
+      "lastchange":"{{ date }}",
+      "bridge":{
+         "state":"noupdates",
+         "lastinstall":"{{ date }}"
+      },
+      "state":"noupdates",
+      "autoinstall":{
+         "updatetime":"T14:00:00",
+         "on":false
+      }
+   },
+   "schedules":{
+   }
+}

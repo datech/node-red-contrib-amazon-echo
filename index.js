@@ -60,7 +60,9 @@ module.exports = function(RED) {
 
         hubNode.on('input', function(msg) {
 
-          if (config.enableinput && "deviceid" in msg.payload && msg.payload.deviceid !== null){
+          if (config.enableinput && "nodeid" in msg.payload && msg.payload.nodeid !== null){
+            msg.payload.deviceid = formatUUID(msg.payload.nodeid);
+            delete msg.payload["nodeid"];
             setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
             payloadHandler(hubNode, msg.payload.deviceid);
           }
@@ -128,28 +130,30 @@ module.exports = function(RED) {
         res.json(output);
       });
 
-      app.get('/api/c6260f982b43a226b5542b967f612ce', function (req, res) {
-        var template = fs.readFileSync(__dirname + '/api/hue/templates/registration.json', 'utf8').toString();
+      app.get('/api/:username', function (req, res) {
+        var lightsTemplate = fs.readFileSync(__dirname + '/api/hue/templates/lights/all.json', 'utf8').toString();
+        var template = fs.readFileSync(__dirname + '/api/hue/templates/state.json', 'utf8').toString();
 
         var data = {
-          username: "c6260f982b43a226b5542b967f612ce"
-        };
+          lights: getDevicesAttributes(hubNode.context()),
+          address: req.hostname,
+          username: req.params.username,
+          date: new Date().toISOString().split('.').shift()
+        }
 
-        var output = Mustache.render(template, data);
+        var output = Mustache.render(template, data, {lightsTemplate: lightsTemplate});
         output = JSON.parse(output);
+        delete output.lights.last;
 
         res.json(output);
       });
 
-      app.get('/api/c6260f982b43a226b5542b967f612ce/lights', function (req, res) {
+      app.get('/api/:username/lights', function (req, res) {
         var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/all.json', 'utf8').toString();
 
-        var data = [];
-        var devices = getDevices();
-
-        for (var key in devices) {
-          var attributes = getDeviceAttributes(devices[key].id, hubNode.context());
-          data.push(Object.assign({}, attributes, devices[key]));
+        var data = {
+          lights: getDevicesAttributes(hubNode.context()),
+          date: new Date().toISOString().split('.').shift()
         }
 
         var output = Mustache.render(template, data);
@@ -159,7 +163,7 @@ module.exports = function(RED) {
         res.json(output);
       });
 
-      app.get('/api/c6260f982b43a226b5542b967f612ce/lights/:id', function (req, res) {
+      app.get('/api/:username/lights/:id', function (req, res) {
         var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/get-state.json', 'utf8').toString();
 
         var deviceName = "";
@@ -171,6 +175,7 @@ module.exports = function(RED) {
 
         var data = getDeviceAttributes(req.params.id, hubNode.context());
         data.name = deviceName;
+        data.date = new Date().toISOString().split('.').shift();
 
         var output = Mustache.render(template, data);
         output = JSON.parse(output);
@@ -178,7 +183,7 @@ module.exports = function(RED) {
         res.json(output);
       });
 
-      app.put('/api/c6260f982b43a226b5542b967f612ce/lights/:id/state', function (req, res) {
+      app.put('/api/:username/lights/:id/state', function (req, res) {
 
         setDeviceAttributes(req.params.id, req.body, hubNode.context());
 
@@ -318,6 +323,19 @@ module.exports = function(RED) {
       };
 
       return getOrDefault(id, defaultAttributes, context);
+    }
+
+    function getDevicesAttributes(context) {
+
+      var devices = getDevices();
+      var devicesAttributes = [];
+
+      for (var key in devices) {
+        var attributes = getDeviceAttributes(devices[key].id, context);
+        devicesAttributes.push(Object.assign({}, attributes, devices[key]));
+      }
+
+      return devicesAttributes;
     }
 
     function setDeviceAttributes(id, attributes, context) {

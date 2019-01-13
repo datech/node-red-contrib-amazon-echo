@@ -17,7 +17,7 @@
   },
   "swupdate": {
       "state": "noupdates",
-      "lastinstall": "2018-01-02T19:24:20"
+      "lastinstall": "{{ date }}"
   },
   "type": "Extended color light",
   "name": "{{ name }}",
