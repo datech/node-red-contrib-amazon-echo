@@ -40,7 +40,59 @@
 </script>
 
 <script type="text/x-red" data-help-name="amazon-echo-hub">
-    <p>Amazon Echo Hub</p>
+  <p>Amazon Echo Hub</p>
+
+  <h3>Inputs</h3>
+  Enable input to allow input payload signals
+  <dl class="message-properties">
+      <dt>payload
+          <span class="property-type">string | buffer</span>
+      </dt>
+      <dd> the payload of the message to publish</dd>
+
+      <dt>payload.nodeid <span class="property-type">string</span></dt>
+      <dd>Node ID is Amazon Echo Device Node ID</dd>
+
+     <dt>payload.on <span class="property-type">string</span></dt>
+     <dd>on/off state of the light</dd>
+
+     <dt>payload.bri <span class="property-type">number</span></dt>
+     <dd>Brightness of the light (min 1, max 254)</dd>
+
+     <dt>payload.hue <span class="property-type">number</span></dt>
+     <dd>Hue of the light (min 0, max 65535)</dd>
+
+     <dt>payload.sat <span class="property-type">number</span></dt>
+     <dd>Saturation of the light (min 0, max 65535)</dd>
+
+     <dt>payload.ct <span class="property-type">string</span></dt>
+     <dd>The mired color temperature of the light (min 153, max 500)</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+     <dt>payload <span class="property-type">string</span></dt>
+     <dd>On state of the light (On - true, Off - false)</dd>
+
+     <dt>on <span class="property-type">boolean</span></dt>
+     <dd>On/Off state of the light</dd>
+
+     <dt>bri <span class="property-type">number</span></dt>
+     <dd>Brightness of the light (min 1, max 254)</dd>
+
+     <dt>hue <span class="property-type">number</span></dt>
+     <dd>Hue of the light (min 0, max 65535)</dd>
+
+     <dt>sat <span class="property-type">number</span></dt>
+     <dd>Saturation of the light (min 0, max 65535)</dd>
+
+     <dt>ct <span class="property-type">string</span></dt>
+     <dd>The mired color temperature of the light (min 153, max 500)</dd>
+
+     <dt>colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (cr - Color Temperature | hs - Hue and Saturation)</dd>
+
+  </dl>
 </script>
 
 
@@ -72,4 +124,33 @@
         <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
         <input type="text" id="node-input-topic">
     </div>
+</script>
+
+<script type="text/x-red" data-help-name="amazon-echo-device">
+  <p>Amazon Echo Device</p>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+     <dt>payload <span class="property-type">string</span></dt>
+     <dd>On state of the light (On - true, Off - false)</dd>
+
+     <dt>on <span class="property-type">boolean</span></dt>
+     <dd>On/Off state of the light</dd>
+
+     <dt>bri <span class="property-type">number</span></dt>
+     <dd>Brightness of the light (min 1, max 254)</dd>
+
+     <dt>hue <span class="property-type">number</span></dt>
+     <dd>Hue of the light (min 0, max 65535)</dd>
+
+     <dt>sat <span class="property-type">number</span></dt>
+     <dd>Saturation of the light (min 0, max 65535)</dd>
+
+     <dt>ct <span class="property-type">string</span></dt>
+     <dd>The mired color temperature of the light (min 153, max 500)</dd>
+
+     <dt>colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (cr - Color Temperature | hs - Hue and Saturation)</dd>
+
+  </dl>
 </script>

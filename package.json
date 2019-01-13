@@ -30,7 +30,7 @@
   "dependencies": {
     "ip": "^1.1.5",
     "node-persist": "^3.0.2",
-    "peer-ssdp": "0.0.5",
+    "peer-ssdp": "^0.0.5",
     "stoppable": "^1.0.4",
     "mustache": "^3.0.1",
     "express": "^4.16.4",
