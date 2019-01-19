@@ -63,20 +63,32 @@ module.exports = function(RED) {
           if (config.enableinput && "nodeid" in msg.payload && msg.payload.nodeid !== null){
             msg.payload.deviceid = formatUUID(msg.payload.nodeid);
             delete msg.payload["nodeid"];
-            setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
-            payloadHandler(hubNode, msg.payload.deviceid);
+
+            // Send payload if state is changed
+            var stateChanged = false;
+            var deviceAttributes = setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
+
+            for (var key in msg.payload) {
+              if (deviceAttributes[key] !== undefined && msg.payload[key] !== deviceAttributes[key]){
+                stateChanged = true;
+              }
+            }
+
+            if (stateChanged){
+              payloadHandler(hubNode, msg.payload.deviceid);
+            }
           }
         });
 
         hubNode.on('close', function(removed, doneFunction) {
-            httpServer.stop(function(){
-                if (typeof doneFunction === 'function')
-                    doneFunction();
-                RED.log.info("Alexa Local Hub closing done...");
-            });
-            setImmediate(function(){
-                httpServer.emit('close');
-            });
+          httpServer.stop(function(){
+            if (typeof doneFunction === 'function')
+                doneFunction();
+            RED.log.info("Alexa Local Hub closing done...");
+          });
+          setImmediate(function(){
+              httpServer.emit('close');
+          });
         });
     }
 
