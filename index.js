@@ -60,21 +60,24 @@ module.exports = function(RED) {
 
         hubNode.on('input', function(msg) {
 
-          if (config.enableinput && "nodeid" in msg.payload && msg.payload.nodeid !== null){
+          if (config.enableinput &&
+            typeof msg.payload === "object" && "nodeid" in msg.payload && msg.payload.nodeid !== null){
+              
             msg.payload.deviceid = formatUUID(msg.payload.nodeid);
             delete msg.payload["nodeid"];
 
             // Send payload if state is changed
             var stateChanged = false;
-            var deviceAttributes = setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
+            var deviceAttributes = getDeviceAttributes(msg.payload.deviceid, hubNode.context());
 
             for (var key in msg.payload) {
-              if (deviceAttributes[key] !== undefined && msg.payload[key] !== deviceAttributes[key]){
+              if (key in deviceAttributes && msg.payload[key] !== deviceAttributes[key]){
                 stateChanged = true;
               }
             }
 
             if (stateChanged){
+              setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
               payloadHandler(hubNode, msg.payload.deviceid);
             }
           }
