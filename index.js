@@ -28,8 +28,8 @@ module.exports = function(RED) {
 
         var port = config.port > 0 && config.port < 65536 ? config.port : 80;
 
-        // Start SSPD service
-        sspd(hubNode, port, config);
+        // Start SSDP service
+        ssdp(port, config);
 
         // Stoppable kill the server on deploy
         const graceMilliseconds = 500;
@@ -62,7 +62,7 @@ module.exports = function(RED) {
 
           if (config.enableinput &&
             typeof msg.payload === "object" && "nodeid" in msg.payload && msg.payload.nodeid !== null){
-              
+
             msg.payload.deviceid = formatUUID(msg.payload.nodeid);
             delete msg.payload["nodeid"];
 
@@ -219,59 +219,21 @@ module.exports = function(RED) {
     //
     // SSDP
     //
-    function sspd(hubNode, port, config) {
+    function ssdp(port, config) {
 
-        var ssdp = require("peer-ssdp");
-        var peer = ssdp.createPeer();
-        peer.on("search", function(headers, address){
-            var isValid = headers.ST && headers.MAN == '"ssdp:discover"';
-            if (!isValid)
-                return;
-
-            var hueHubId = getHueHubId(config.id);
-
-            // The {{networkInterfaceAddress}} will be replaced before
-            // sending the SSDP message with the actual IP Address of the corresponding
-            // network interface.
-            var xmlDescriptionURL = "http://{{networkInterfaceAddress}}:" + port + "/description.xml";
-
-            var responseBaseTemplate = {
-              "HOST": "239.255.255.250:1900",
-              "CACHE-CONTROL": "max-age=100",
-              "EXT": "",
-              "LOCATION": xmlDescriptionURL,
-              "SERVER": "Linux/3.14.0 UPnP/1.0 IpBridge/1.17.0"
-            }
-
-            var responseTemplates = [
-              {
-                "ST": "upnp:rootdevice",
-                "USN": "uuid:" + hueHubId
+        var ssdpService = require('node-ssdp').Server
+          , server = new ssdpService({
+              location: {
+                port: port,
+                path: '/description.xml'
               },
-              {
-                "ST": "uuid:" + hueHubId,
-                "USN": "uuid:" + hueHubId
-              },
-              {
-                "ST": "urn:schemas-upnp-org:device:basic:1",
-                "USN": "uuid:" + hueHubId
-              }
-            ]
+              udn: 'uuid:' + getHueHubId(config)
+            })
 
-            var responseNum = 1;
-            responseTemplates.forEach(function(responseTemplate) {
+        server.addUSN('upnp:rootdevice');
+        server.addUSN('urn:schemas-upnp-org:device:basic:1');
 
-              var response = Object.assign({}, responseBaseTemplate, responseTemplate);
-
-              setTimeout(function() {
-                  peer.reply(response, address);
-              }, 1600 + 100 * responseNum);
-
-              responseNum += 1
-            });
-
-        });
-        peer.start();
+        server.start();
     }
 
     //
