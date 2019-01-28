@@ -109,13 +109,20 @@ module.exports = function(RED) {
       var fs = require('fs');
       var bodyParser = require('body-parser');
 
-      app.use(bodyParser.json());
+      app.use(bodyParser.json({type: '*/*'}));
+
+      app.use(function(err, req, res, next) {
+        if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+          RED.log.debug("Error: Invalid JSON request: " + JSON.stringify(err.body));
+        }
+        next();
+      });
 
       app.use(function (req, res, next) {
         if (Object.keys(req.body).length > 0)
           RED.log.debug("Request body: " + JSON.stringify(req.body));
-        next()
-      })
+        next();
+      });
 
       app.get('/description.xml', function (req, res) {
         var template = fs.readFileSync(__dirname + '/api/hue/templates/description.xml').toString();
