@@ -38,9 +38,12 @@ Install using npm
   *  Alexa, lower Bedroom light by 15%
   
 ## Requirements
-Amazon Echo Hub node is starting a service listening on port 80 which requires node-red process to be started with root user.
+Amazon Echo Hub node is starting a service listening on port 80 which requires Node-Red process to be started with root user.
 
 **No additional settings are needed if Node-Red is started as Home Assistant add-on**
+
+## Troubleshooting
+Detailed troubleshooting instructions can be found on the [Wiki](https://github.com/datech/node-red-contrib-amazon-echo/wiki)
 
 ## Bugs and feature requests
 Please create an issue in [GitHub](https://github.com/datech/node-red-contrib-amazon-echo/issues)
