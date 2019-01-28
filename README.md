@@ -7,7 +7,7 @@ Alexa controlled Node-Red nodes supporting latest Amazon Echo devices
 **NO cloud dependencies.**
 
 ## Installation
-Install from your Node-RED Manage Pallete
+Install from your Node-RED Manage Palette
 
 or
 
@@ -19,24 +19,30 @@ Install using npm
   * Add **Amazon Echo Hub** node your flow
   * Add multiple **Amazon Echo Device** nodes linked to **Amazon Echo Hub node**
   Note: Use unique names for device nodes. Alexa will use the node name to manage your smart device
-  * Ask **"Alexa, discover devices"** or start the discover procedure from the Alexa app
+  * Ask **"Alexa, discover devices"** or start the discover procedure from the Alexa mobile app
 
 ![Usage screenshot](https://raw.githubusercontent.com/datech/node-red-contrib-amazon-echo/master/docs/images/how-to-use.png "Screenshot")
 
 ## Features
-  * Switch on/off
+  * Turning on/off
   * Dimming
-  * Set of the light color
+  * Setting the light color
 
 ## Supported devices
-  * Amazon Echo Gen 2
-  * Amazon Echo Dot Gen 2 & Gen 3
+  * Amazon Echo 2nd generation
+  * Amazon Echo Plus 2nd generation
+  * Amazon Echo Dot 1st, 2nd and 3rd generations
 
 ## Example Alexa commands
-  *  Alexa, set Kitchen light to 40%
-  *  Alexa, switch off Ceiling fan
-  *  Alexa, lower Bedroom light by 15%
-  
+  *  Alexa, turn on/off {device}
+  *  Alexa, switch on/off {device}
+  *  Alexa, set {device} to 50%
+  *  Alexa, turn my {device} light green
+  *  Alexa, set the {device} light to orange
+  *  Alexa, make the {device} warmer
+  *  Alexa, brighten {device} to 60 percent
+  *  Alexa, dim the {device} lights
+
 ## Requirements
 Amazon Echo Hub node is starting a service listening on port 80 which requires Node-Red process to be started with root user.
 
