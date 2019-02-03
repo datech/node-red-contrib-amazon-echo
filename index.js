@@ -324,6 +324,13 @@ module.exports = function(RED) {
 
     function setDeviceAttributes(id, attributes, context) {
 
+      if (attributes.xy !== undefined && attributes.xy !== null) {
+        var xy = attributes.xy;
+        var hsb = colorXYY2SHB(xy[0], xy[1], 100);
+        attributes.hue = hsb[0];
+        attributes.sat = hsb[1];
+      }
+
       var currentAttributes = getDeviceAttributes(id, context);
 
       for (var key in currentAttributes) {
@@ -350,11 +357,60 @@ module.exports = function(RED) {
     function payloadHandler(hubNode, deviceId) {
 
       var msg = getDeviceAttributes(deviceId, hubNode.context());
+      msg.rgb = colorSHB2RGB(msg.hue, msg.sat, 254);
       msg.payload = msg.on ? "on" : "off";
       msg.deviceid = deviceId;
-      msg.topic= "";
+      msg.topic = "";
 
       hubNode.send(msg);
     }
 
+    //
+    // Colors conversion
+    //
+    var colorConvert = require('color-convert');
+
+    function colorXYY2XYZ(xs, ys, yc){
+      var xc = xs * yc / ys;
+      var zc = (1 - xs - ys) * yc / ys;
+
+      return [xc, yc, zc];
+    }
+
+    function colorXYZ2SHV(x, y, z){
+      var hsv = colorConvert.xyz.hsv(x, y, z);
+
+      return hsv;
+    }
+
+    function colorSHV2HSB(h, s, v){
+      var hh = h / 360 * 65535;
+      var ss = s / 100 * 254;
+      var bb = v / 100 * 254;
+
+      return [hh, ss, bb]
+    }
+
+    function colorSHB2HSV(h, s, b){
+      var hh = h * 360 / 65535;
+      var ss = s * 100 / 254;
+      var vv = b * 100 / 254;
+
+      return [hh, ss, vv]
+    }
+
+    function colorXYY2SHB(xs, ys, yc){
+      var xyz = colorXYY2XYZ(xs, ys, yc);
+      var hsv = colorXYZ2SHV(xyz[0], xyz[1], xyz[2]);
+      var hsb = colorSHV2HSB(hsv[0], hsv[1], hsv[2]);
+
+      return hsb;
+    }
+
+    function colorSHB2RGB(h, s, b){
+      var hsv = colorSHB2HSV(h, s, b);
+      var rgb = colorConvert.hsv.rgb(hsv[0], hsv[1], hsv[2]);
+
+      return rgb;
+    }
 }

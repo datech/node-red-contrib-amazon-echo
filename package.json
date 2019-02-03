@@ -34,6 +34,7 @@
     "stoppable": "^1.0.4",
     "mustache": "^3.0.1",
     "express": "^4.16.4",
-    "body-parser": "^1.18.3"
+    "body-parser": "^1.18.3",
+    "color-convert": "^2.0.0"
   }
 }
