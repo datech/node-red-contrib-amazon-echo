@@ -358,6 +358,8 @@ module.exports = function(RED) {
 
       var msg = getDeviceAttributes(deviceId, hubNode.context());
       msg.rgb = colorSHB2RGB(msg.hue, msg.sat, 254);
+      var percentArray = ["1","26","52","77","102","128","153","178","203","229","254"];
+      msg.percentage = 10 * percentArray.indexOf(msg.bri.toString());
       msg.payload = msg.on ? "on" : "off";
       msg.deviceid = deviceId;
       msg.topic = "";
