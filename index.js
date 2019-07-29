@@ -358,6 +358,8 @@ module.exports = function(RED) {
 
       var msg = getDeviceAttributes(deviceId, hubNode.context());
       msg.rgb = colorSHB2RGB(msg.hue, msg.sat, 254);
+      var percentArray = [1,4,6,9,11,14,16,19,21,24,26,29,31,34,36,39,41,44,47,49,52,54,47,59,62,64,67,69,72,74,77,79,82,84,87,90,92,95,97,100,102,105,107,110,112,115,117,120,122,125,128,130,133,135,138,140,143,145,148,150,153,155,158,160,163,165,168,171,173,176,178,181,183,186,188,191,193,196,198,201,203,206,208,211,214,216,219,221,224,226,229,231,234,236,239,241,244,246,249,251,254];
+      msg.percentage = percentArray.indexOf(msg.bri);
       msg.payload = msg.on ? "on" : "off";
       msg.deviceid = deviceId;
       msg.topic = "";
