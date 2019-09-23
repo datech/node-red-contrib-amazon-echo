@@ -60,7 +60,7 @@ module.exports = function(RED) {
 
         hubNode.on('input', function(msg) {
 
-          if (config.enableinput &&
+          if (config.processinput > 0 &&
             typeof msg.payload === "object" && "nodeid" in msg.payload && msg.payload.nodeid !== null){
 
             msg.payload.deviceid = formatUUID(msg.payload.nodeid);
@@ -78,7 +78,11 @@ module.exports = function(RED) {
 
             if (stateChanged){
               setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
-              payloadHandler(hubNode, msg.payload.deviceid);
+
+              // Output only if "Process and output" option is selected
+              if (config.processinput == 2 ){
+                payloadHandler(hubNode, msg.payload.deviceid);
+              }
             }
           }
         });
@@ -288,7 +292,7 @@ module.exports = function(RED) {
 
       RED.nodes.eachNode(function(node){
         if ( node.type == "amazon-echo-device" ){
-          devices.push({id: formatUUID(node.id), name: node.name});
+        devices.push({id: formatUUID(node.id), name: node.name});
         }
       });
 

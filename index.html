@@ -3,15 +3,15 @@
         category: "input",
         color: "#31C4F3",
         defaults: {
-            port: {value:"80", required:true, validate:
+            port: { value: "80", required: true, validate:
               function(port) {
                 return port > 0 && port < 65536;
               }
             },
-            enableinput: {value:false}
+            processinput: { value: 0 }
         },
-        inputs:1,
-        outputs:1,
+        inputs: 1,
+        outputs: 1,
         icon: "amazon-echo-hub.png",
         label: function() {
             return "Amazon Echo Hub";
@@ -20,20 +20,29 @@
 </script>
 
 <script type="text/x-red" data-template-name="amazon-echo-hub">
+    <style media="screen">
+      .form-row label {
+        width: 120px;
+      }
+    </style>
     <div class="form-row">
         <label for="node-input-port"><i class="fa fa-globe"></i> Port</label>
         <input type="text" id="node-input-port" placeholder="80">
     </div>
     <div class="form-row">
-        <label for="node-input-enableinput"><i class="fa fa-tag"></i> Enable Input</label>
-        <input type="checkbox" id="node-input-enableinput">
+        <label for="node-input-processinput"><i class="fa fa-tag"></i> Process Input</label>
+        <select class="form-control" id="node-input-processinput">
+          <option value="0">No</option>
+          <option value="1">Process</option>
+          <option value="2">Process and output</option>
+        </select>
     </div>
     <div class="form-tips">
       Tips:
       <p>
         <ul>
           <li>Set port to <strong>80</strong> if you have latest generation Amazon Echo devices.</li>
-          <li>Enable input if you want to send signal to Amazon Echo Hub.</li>
+          <li>Set process input if you want to send signal to Amazon Echo Hub.</li>
         </ul>
       </p>
     </div>
@@ -94,10 +103,10 @@
 
      <dt>rgb <span class="property-type">array</span></dt>
      <dd>The light color in RGB format</dd>
-     
+
      <dt>percentage <span class="property-type">array</span></dt>
-     <dd>The requested brightness % level</dd>
-     
+     <dd>The brightness % level</dd>
+
   </dl>
 </script>
 
@@ -160,7 +169,7 @@
 
      <dt>rgb <span class="property-type">array</span></dt>
      <dd>The light color in RGB format</dd>
-     
+
      <dt>percentage <span class="property-type">array</span></dt>
      <dd>The requested brightness % level</dd>
   </dl>
