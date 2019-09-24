@@ -60,11 +60,32 @@ module.exports = function(RED) {
 
         hubNode.on('input', function(msg) {
 
-          if (config.processinput > 0 &&
-            typeof msg.payload === "object" && "nodeid" in msg.payload && msg.payload.nodeid !== null){
+          var nodeDeviceId = null;
 
-            msg.payload.deviceid = formatUUID(msg.payload.nodeid);
-            delete msg.payload["nodeid"];
+          if (typeof msg.payload === "object") {
+
+            if ("nodeid" in msg.payload && msg.payload.nodeid !== null) {
+
+              nodeDeviceId = msg.payload.nodeid
+              delete msg.payload["nodeid"];
+
+            } else {
+
+              if ("nodename" in msg.payload && msg.payload.nodename !== null) {
+                getDevices().forEach(function(device) {
+                  if ( msg.payload.nodename == device.name ) {
+                    nodeDeviceId = device.id
+                    delete msg.payload["nodename"];
+                  }
+                });
+              }
+
+            }
+          }
+
+          if (config.processinput > 0 && nodeDeviceId !== null) {
+
+            msg.payload.deviceid = formatUUID(nodeDeviceId);
 
             // Send payload if state is changed
             var stateChanged = false;
@@ -76,7 +97,7 @@ module.exports = function(RED) {
               }
             }
 
-            if (stateChanged){
+            if (stateChanged) {
               setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
 
               // Output only if "Process and output" option is selected
@@ -274,25 +295,25 @@ module.exports = function(RED) {
 
     function formatUUID(id) {
 
-        if (id === null || id === undefined)
-            return "";
-        return ("" + id).replace(".", "").trim();
+      if (id === null || id === undefined)
+          return "";
+      return ("" + id).replace(".", "").trim();
     }
 
     function getHueHubId(config) {
 
-        var uuid = "00112233-4455-6677-8899-";
-        uuid += formatUUID(config.id);
-        return uuid;
+      var uuid = "00112233-4455-6677-8899-";
+      uuid += formatUUID(config.id);
+      return uuid;
     }
 
     function getDevices() {
 
       var devices = [];
 
-      RED.nodes.eachNode(function(node){
-        if ( node.type == "amazon-echo-device" ){
-        devices.push({id: formatUUID(node.id), name: node.name});
+      RED.nodes.eachNode(function(node) {
+        if ( node.type == "amazon-echo-device" ) {
+          devices.push({id: formatUUID(node.id), name: node.name});
         }
       });
 
