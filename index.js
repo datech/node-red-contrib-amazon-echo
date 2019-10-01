@@ -358,16 +358,22 @@ module.exports = function(RED) {
 
       var currentAttributes = getDeviceAttributes(id, context);
 
-      for (var key in currentAttributes) {
-        currentAttributes[key] =
-            valueOrDefault(attributes[key], currentAttributes[key]);
+      // Set correct color mode
+      if (attributes.ct !== undefined) {
+        attributes.colormode = "ct";
+      } else if (attributes.hue !== undefined || attributes.sat !== undefined) {
+        attributes.colormode = "hs";
       }
 
-      // Set correct color mode
-      if ( attributes.ct !== undefined ){
-        currentAttributes.colormode = "ct";
-      }else if ( attributes.hue !== undefined || attributes.sat !== undefined ) {
-        currentAttributes.colormode = "hs";
+      // Reset changes attribute
+      currentAttributes["changed"] = {};
+
+      for (var key in currentAttributes) {
+        // Find changes
+        if (attributes[key] !== currentAttributes[key] && attributes[key] !== undefined){
+          currentAttributes["changed"][key] = currentAttributes[key];
+        }
+        currentAttributes[key] = valueOrDefault(attributes[key], currentAttributes[key]);
       }
 
       // Save attributes
