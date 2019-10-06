@@ -18,7 +18,7 @@ module.exports = function(RED) {
   }
 
   // NodeRED registration
-  RED.nodes.registerType("amazon-echo-device", AmazonEchoDeviceNode, {});
+  RED.nodes.registerType('amazon-echo-device', AmazonEchoDeviceNode, {});
 
   function AmazonEchoHubNode(config) {
 
@@ -39,9 +39,9 @@ module.exports = function(RED) {
 
     httpServer.on('error', function(error) {
       hubNode.status({
-        fill: "red",
-        shape: "ring",
-        text: "Unable to start on port " + port
+        fill: 'red',
+        shape: 'ring',
+        text: 'Unable to start on port ' + port
       });
       RED.log.error(error);
       return;
@@ -51,18 +51,18 @@ module.exports = function(RED) {
 
       if (error) {
         hubNode.status({
-          fill: "red",
-          shape: "ring",
-          text: "Unable to start on port " + port
+          fill: 'red',
+          shape: 'ring',
+          text: 'Unable to start on port ' + port
         });
         RED.log.error(error);
         return;
       }
 
       hubNode.status({
-        fill: "green",
-        shape: "dot",
-        text: "online"
+        fill: 'green',
+        shape: 'dot',
+        text: 'online'
       });
 
       // REST API Settings
@@ -73,20 +73,20 @@ module.exports = function(RED) {
 
       var nodeDeviceId = null;
 
-      if (typeof msg.payload === "object") {
+      if (typeof msg.payload === 'object') {
 
-        if ("nodeid" in msg.payload && msg.payload.nodeid !== null) {
+        if ('nodeid' in msg.payload && msg.payload.nodeid !== null) {
 
           nodeDeviceId = msg.payload.nodeid
-          delete msg.payload["nodeid"];
+          delete msg.payload['nodeid'];
 
         } else {
 
-          if ("nodename" in msg.payload && msg.payload.nodename !== null) {
+          if ('nodename' in msg.payload && msg.payload.nodename !== null) {
             getDevices().forEach(function(device) {
               if (msg.payload.nodename == device.name) {
                 nodeDeviceId = device.id
-                delete msg.payload["nodename"];
+                delete msg.payload['nodename'];
               }
             });
           }
@@ -109,9 +109,17 @@ module.exports = function(RED) {
         }
 
         if (stateChanged) {
-          setDeviceAttributes(msg.payload.deviceid, msg.payload, hubNode.context());
 
-          // Output only if "Process and output" option is selected
+          var meta = {
+            insert: {
+              by: 'input',
+              details: {}
+            }
+          }
+
+          setDeviceAttributes(msg.payload.deviceid, msg.payload, meta, hubNode.context());
+
+          // Output only if 'Process and output' option is selected
           if (config.processinput == 2) {
             payloadHandler(hubNode, msg.payload.deviceid);
           }
@@ -123,7 +131,7 @@ module.exports = function(RED) {
       httpServer.stop(function() {
         if (typeof doneFunction === 'function')
           doneFunction();
-        RED.log.info("Alexa Local Hub closing done...");
+        RED.log.info('Alexa Local Hub closing done...');
       });
       setImmediate(function() {
         httpServer.emit('close');
@@ -132,14 +140,14 @@ module.exports = function(RED) {
   }
 
   // NodeRED registration
-  RED.nodes.registerType("amazon-echo-hub", AmazonEchoHubNode, {});
+  RED.nodes.registerType('amazon-echo-hub', AmazonEchoHubNode, {});
 
   //
   // REST API
   //
   function api(app, hubNode, config) {
 
-    const Mustache = require("mustache");
+    const Mustache = require('mustache');
 
     var fs = require('fs');
     var bodyParser = require('body-parser');
@@ -150,14 +158,14 @@ module.exports = function(RED) {
 
     app.use(function(err, req, res, next) {
       if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-        RED.log.debug("Error: Invalid JSON request: " + JSON.stringify(err.body));
+        RED.log.debug('Error: Invalid JSON request: ' + JSON.stringify(err.body));
       }
       next();
     });
 
     app.use(function(req, res, next) {
       if (Object.keys(req.body).length > 0)
-        RED.log.debug("Request body: " + JSON.stringify(req.body));
+        RED.log.debug('Request body: ' + JSON.stringify(req.body));
       next();
     });
 
@@ -180,7 +188,7 @@ module.exports = function(RED) {
       var template = fs.readFileSync(__dirname + '/api/hue/templates/registration.json', 'utf8').toString();
 
       var data = {
-        username: "c6260f982b43a226b5542b967f612ce"
+        username: 'c6260f982b43a226b5542b967f612ce'
       };
 
       var output = Mustache.render(template, data);
@@ -227,7 +235,7 @@ module.exports = function(RED) {
     app.get('/api/:username/lights/:id', function(req, res) {
       var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/get-state.json', 'utf8').toString();
 
-      var deviceName = "";
+      var deviceName = '';
 
       getDevices().forEach(function(device) {
         if (req.params.id == device.id)
@@ -246,7 +254,19 @@ module.exports = function(RED) {
 
     app.put('/api/:username/lights/:id/state', function(req, res) {
 
-      setDeviceAttributes(req.params.id, req.body, hubNode.context());
+      var meta = {
+        insert: {
+          by: 'alexa',
+          details: {
+            ip: req.headers['x-forwarded-for'] ||
+             req.connection.remoteAddress ||
+             '',
+            user_agent: req.headers['user-agent']
+          }
+        }
+      }
+
+      setDeviceAttributes(req.params.id, req.body, meta, hubNode.context());
 
       var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/set-state.json', 'utf8').toString();
 
@@ -310,13 +330,13 @@ module.exports = function(RED) {
   function formatUUID(id) {
 
     if (id === null || id === undefined)
-      return "";
-    return ("" + id).replace(".", "").trim();
+      return '';
+    return ('' + id).replace('.', '').trim();
   }
 
   function getHueHubId(config) {
 
-    var uuid = "00112233-4455-6677-8899-";
+    var uuid = '00112233-4455-6677-8899-';
     uuid += formatUUID(config.id);
     return uuid;
   }
@@ -326,7 +346,7 @@ module.exports = function(RED) {
     var devices = [];
 
     RED.nodes.eachNode(function(node) {
-      if (node.type == "amazon-echo-device") {
+      if (node.type == 'amazon-echo-device') {
         devices.push({
           id: formatUUID(node.id),
           name: node.name
@@ -345,7 +365,8 @@ module.exports = function(RED) {
       hue: 0,
       sat: 254,
       ct: 199,
-      colormode: "ct"
+      colormode: 'ct',
+      meta: {}
     };
 
     return getOrDefault(id, defaultAttributes, context);
@@ -364,7 +385,14 @@ module.exports = function(RED) {
     return devicesAttributes;
   }
 
-  function setDeviceAttributes(id, attributes, context) {
+  function setDeviceAttributes(id, attributes, meta, context) {
+
+    var currentAttributes = getDeviceAttributes(id, context);
+
+    // Reset meta attribute
+    meta['insert']['details']['date'] = new Date();
+    meta['input'] = attributes;
+    meta['changes'] = {};
 
     if (attributes.xy !== undefined && attributes.xy !== null) {
       var xy = attributes.xy;
@@ -373,25 +401,23 @@ module.exports = function(RED) {
       attributes.sat = hsb[1];
     }
 
-    var currentAttributes = getDeviceAttributes(id, context);
-
     // Set correct color mode
     if (attributes.ct !== undefined) {
-      attributes.colormode = "ct";
+      attributes.colormode = 'ct';
     } else if (attributes.hue !== undefined || attributes.sat !== undefined) {
-      attributes.colormode = "hs";
+      attributes.colormode = 'hs';
     }
-
-    // Reset changed attribute
-    currentAttributes["changed"] = {};
 
     for (var key in currentAttributes) {
       // Find changes
       if (attributes[key] !== currentAttributes[key] && attributes[key] !== undefined) {
-        currentAttributes["changed"][key] = currentAttributes[key];
+        meta['changes'][key] = currentAttributes[key];
       }
       currentAttributes[key] = valueOrDefault(attributes[key], currentAttributes[key]);
     }
+
+    // Include meta
+    currentAttributes['meta'] = meta;
 
     // Save attributes
     context.set(id, currentAttributes);
@@ -407,9 +433,9 @@ module.exports = function(RED) {
     var msg = getDeviceAttributes(deviceId, hubNode.context());
     msg.rgb = colorSHB2RGB(msg.hue, msg.sat, 254);
     msg.percentage = Math.floor(msg.bri / 253 * 100);
-    msg.payload = msg.on ? "on" : "off";
+    msg.payload = msg.on ? 'on' : 'off';
     msg.deviceid = deviceId;
-    msg.topic = "";
+    msg.topic = '';
 
     hubNode.send(msg);
   }

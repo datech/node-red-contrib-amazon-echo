@@ -102,7 +102,7 @@
      <dd>The mired color temperature of the light (min 153, max 500)</dd>
 
      <dt>colormode <span class="property-type">string</span></dt>
-     <dd>Indicates the color mode (cr - Color Temperature | hs - Hue and Saturation)</dd>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
 
      <dt>rgb <span class="property-type">array</span></dt>
      <dd>The light color in RGB format</dd>
@@ -110,7 +110,25 @@
      <dt>percentage <span class="property-type">number</span></dt>
      <dd>The brightness % level (min 1, max 100)</dd>
 
-     <dt>changed <span class="property-type">array</span></dt>
+     <dt>meta <span class="property-type">array</span></dt>
+     <dd>Meta data hashmap</dd>
+
+     <dt>meta.insert.by <span class="property-type">string</span></dt>
+     <dd>The insert type (alexa | input)</dd>
+
+     <dt>meta.insert.date <span class="property-type">string</span></dt>
+     <dd>The insert date and time</dd>
+
+     <dt>meta.insert.details.ip <span class="property-type">string</span></dt>
+     <dd>Alexa master device IP address.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></li></dd>
+
+     <dt>meta.insert.details.user_agent <span class="property-type">string</span></dt>
+     <dd>Alexa master device user agent.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></dd>
+
+     <dt>meta.input <span class="property-type">array</span></dt>
+     <dd>Hashmap with all input attributes</dd>
+
+     <dt>meta.changes <span class="property-type">array</span></dt>
      <dd>Hashmap of all changed attributes and the corresponding old values</dd>
   </dl>
 </script>
@@ -170,7 +188,7 @@
      <dd>The mired color temperature of the light (min 153, max 500)</dd>
 
      <dt>colormode <span class="property-type">string</span></dt>
-     <dd>Indicates the color mode (cr - Color Temperature | hs - Hue and Saturation)</dd>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
 
      <dt>rgb <span class="property-type">array</span></dt>
      <dd>The light color in RGB format</dd>
@@ -178,7 +196,25 @@
      <dt>percentage <span class="property-type">number</span></dt>
      <dd>The brightness % level (min 1, max 100)</dd>
 
-     <dt>changed <span class="property-type">array</span></dt>
+     <dt>meta <span class="property-type">array</span></dt>
+     <dd>Meta data hashmap</dd>
+
+     <dt>meta.insert.by <span class="property-type">string</span></dt>
+     <dd>The insert type (alexa | input)</dd>
+
+     <dt>meta.insert.date <span class="property-type">string</span></dt>
+     <dd>The insert date and time</dd>
+
+     <dt>meta.insert.details.ip <span class="property-type">string</span></dt>
+     <dd>Alexa master device IP address.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></li></dd>
+
+     <dt>meta.insert.details.user_agent <span class="property-type">string</span></dt>
+     <dd>Alexa master device user agent.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></dd>
+
+     <dt>meta.input <span class="property-type">array</span></dt>
+     <dd>Hashmap with all input attributes</dd>
+
+     <dt>meta.changes <span class="property-type">array</span></dt>
      <dd>Hashmap of all changed attributes and the corresponding old values</dd>
   </dl>
 </script>
