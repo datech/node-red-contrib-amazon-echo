@@ -98,13 +98,15 @@ module.exports = function(RED) {
 
         msg.payload.deviceid = formatUUID(nodeDeviceId);
 
-        // Send payload if state is changed
-        var stateChanged = false;
-        var deviceAttributes = getDeviceAttributes(msg.payload.deviceid, hubNode.context());
+        // Send payload if state is changed or force send is set
+        var stateChanged = msg.payload.forceSend ? true : false;
+        if (!stateChanged) {
+          var deviceAttributes = getDeviceAttributes(msg.payload.deviceid, hubNode.context());
 
-        for (var key in msg.payload) {
-          if (key in deviceAttributes && msg.payload[key] !== deviceAttributes[key]) {
-            stateChanged = true;
+          for (var key in msg.payload) {
+            if (key in deviceAttributes && msg.payload[key] !== deviceAttributes[key]) {
+              stateChanged = true;
+            }
           }
         }
 
