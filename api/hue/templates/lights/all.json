@@ -31,7 +31,7 @@
             "control": {
                 "mindimlevel": 5000,
                 "maxlumen": 600,
-                "colorgamuttype": "B",
+                "colorgamuttype": "A",
                 "colorgamut": [
                     [
                         0.675,

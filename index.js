@@ -1,6 +1,8 @@
 module.exports = function(RED) {
   'use strict';
 
+  const HueColor = require('hue-colors').default;
+
   function AmazonEchoDeviceNode(config) {
     RED.nodes.createNode(this, config);
     var deviceNode = this;
@@ -98,32 +100,20 @@ module.exports = function(RED) {
 
         msg.payload.deviceid = formatUUID(nodeDeviceId);
 
-        // Send payload if state is changed
-        var stateChanged = false;
-        var deviceAttributes = getDeviceAttributes(msg.payload.deviceid, hubNode.context());
-
-        for (var key in msg.payload) {
-          if (key in deviceAttributes && msg.payload[key] !== deviceAttributes[key]) {
-            stateChanged = true;
+        var meta = {
+          insert: {
+            by: 'input',
+            details: {}
           }
         }
 
-        if (stateChanged) {
+        var deviceAttributes = setDeviceAttributes(msg.payload.deviceid, msg.payload, meta, hubNode.context());
 
-          var meta = {
-            insert: {
-              by: 'input',
-              details: {}
-            }
-          }
-
-          setDeviceAttributes(msg.payload.deviceid, msg.payload, meta, hubNode.context());
-
-          // Output only if 'Process and output' option is selected
-          if (config.processinput == 2) {
-            payloadHandler(hubNode, msg.payload.deviceid);
-          }
+        // Output only if 'Process and output' option is selected and state is changed
+        if (config.processinput == 2 && Object.keys(deviceAttributes.meta.changes).length > 0) {
+          payloadHandler(hubNode, msg.payload.deviceid);
         }
+
       }
     });
 
@@ -259,8 +249,8 @@ module.exports = function(RED) {
           by: 'alexa',
           details: {
             ip: req.headers['x-forwarded-for'] ||
-             req.connection.remoteAddress ||
-             '',
+              req.connection.remoteAddress ||
+              '',
             user_agent: req.headers['user-agent']
           }
         }
@@ -362,9 +352,12 @@ module.exports = function(RED) {
     var defaultAttributes = {
       on: false,
       bri: 254,
+      percentage: 100,
       hue: 0,
       sat: 254,
+      xy: [0.6484272236872118, 0.33085610147277794],
       ct: 199,
+      rgb: [254, 0, 0],
       colormode: 'ct',
       meta: {}
     };
@@ -387,42 +380,77 @@ module.exports = function(RED) {
 
   function setDeviceAttributes(id, attributes, meta, context) {
 
-    var currentAttributes = getDeviceAttributes(id, context);
-
     // Reset meta attribute
     meta['insert']['details']['date'] = new Date();
     meta['input'] = attributes;
     meta['changes'] = {};
 
-    if (attributes.xy !== undefined && attributes.xy !== null) {
-      var xy = attributes.xy;
-      var hsb = colorXYY2SHB(xy[0], xy[1], 100);
-      attributes.hue = hsb[0];
-      attributes.sat = hsb[1];
+    var saved = getDeviceAttributes(id, context);
+    var current = {};
+
+    // Set defaults
+    for (var key in saved) {
+      current[key] = valueOrDefault(attributes[key], saved[key]);
     }
 
-    // Set correct color mode
+    // Set color temperature
     if (attributes.ct !== undefined) {
-      attributes.colormode = 'ct';
-    } else if (attributes.hue !== undefined || attributes.sat !== undefined) {
-      attributes.colormode = 'hs';
+      current.colormode = 'ct';
     }
 
-    for (var key in currentAttributes) {
-      // Find changes
-      if (attributes[key] !== currentAttributes[key] && attributes[key] !== undefined) {
-        meta['changes'][key] = currentAttributes[key];
+    // Set Hue color
+    if (attributes.hue !== undefined && attributes.sat !== undefined) {
+      var hueColor = HueColor.fromHsb(current.hue, current.sat, current.bri);
+      var cie = hueColor.toCie();
+      var rgb = hueColor.toRgb();
+      current.xy = [cie[0] || 0, cie[1] || 0];
+      current.rgb = rgb;
+      current.colormode = 'hs';
+    }
+
+    // Set CIE
+    if (attributes.xy !== undefined && Array.isArray(attributes.xy) && attributes.xy.length == 2) {
+      var hueColor = HueColor.fromCIE(current.xy[0], current.xy[1], current.bri);
+      var hsb = hueColor.toHsb();
+      var rgb = hueColor.toRgb();
+      current.hue = hsb[0] || 0;
+      current.sat = hsb[1] || 0;
+      current.rgb = rgb;
+      current.colormode = 'hs';
+    }
+
+    // Set RGB
+    if (attributes.rgb !== undefined && Array.isArray(attributes.rgb) && attributes.rgb.length == 3) {
+      var hueColor = HueColor.fromRgb(current.rgb[0], current.rgb[1], current.rgb[2]);
+      var hsb = hueColor.toHsb();
+      var cie = hueColor.toCie();
+      current.hue = hsb[0] || 0;
+      current.sat = hsb[1] || 0;
+      current.bri = hsb[2] || 0;
+      current.xy = [cie[0] || 0, cie[1] || 0]
+      current.colormode = 'hs';
+    }
+
+    // Set brightness percentage
+    current.percentage = Math.floor(current.bri / 253 * 100);
+
+    // Populate meta.changes
+    for (var key in saved) {
+      if (JSON.stringify(saved[key]) !== JSON.stringify(current[key])) {
+        meta['changes'][key] = saved[key];
       }
-      currentAttributes[key] = valueOrDefault(attributes[key], currentAttributes[key]);
     }
 
     // Include meta
-    currentAttributes['meta'] = meta;
+    current['meta'] = meta;
 
     // Save attributes
-    context.set(id, currentAttributes);
+    context.set(id, current);
 
-    return getOrDefault(id, currentAttributes, context);
+    // Set payload
+    current.payload = current.on ? 'on' : 'off';
+
+    return getOrDefault(id, current, context);
   }
 
   //
@@ -431,61 +459,12 @@ module.exports = function(RED) {
   function payloadHandler(hubNode, deviceId) {
 
     var msg = getDeviceAttributes(deviceId, hubNode.context());
-    msg.rgb = colorSHB2RGB(msg.hue, msg.sat, 254);
-    msg.percentage = Math.floor(msg.bri / 253 * 100);
-    msg.payload = msg.on ? 'on' : 'off';
     msg.deviceid = deviceId;
     msg.topic = '';
+
+    console.log(msg);
 
     hubNode.send(msg);
   }
 
-  //
-  // Colors conversion
-  //
-  var colorConvert = require('color-convert');
-
-  function colorXYY2XYZ(xs, ys, yc) {
-    var xc = xs * yc / ys;
-    var zc = (1 - xs - ys) * yc / ys;
-
-    return [xc, yc, zc];
-  }
-
-  function colorXYZ2SHV(x, y, z) {
-    var hsv = colorConvert.xyz.hsv(x, y, z);
-
-    return hsv;
-  }
-
-  function colorSHV2HSB(h, s, v) {
-    var hh = h / 360 * 65535;
-    var ss = s / 100 * 254;
-    var bb = v / 100 * 254;
-
-    return [hh, ss, bb]
-  }
-
-  function colorSHB2HSV(h, s, b) {
-    var hh = h * 360 / 65535;
-    var ss = s * 100 / 254;
-    var vv = b * 100 / 254;
-
-    return [hh, ss, vv]
-  }
-
-  function colorXYY2SHB(xs, ys, yc) {
-    var xyz = colorXYY2XYZ(xs, ys, yc);
-    var hsv = colorXYZ2SHV(xyz[0], xyz[1], xyz[2]);
-    var hsb = colorSHV2HSB(hsv[0], hsv[1], hsv[2]);
-
-    return hsb;
-  }
-
-  function colorSHB2RGB(h, s, b) {
-    var hsv = colorSHB2HSV(h, s, b);
-    var rgb = colorConvert.hsv.rgb(hsv[0], hsv[1], hsv[2]);
-
-    return rgb;
-  }
 }

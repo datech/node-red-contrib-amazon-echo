@@ -19,8 +19,8 @@
       "state": "noupdates",
       "lastinstall": "{{ date }}"
   },
-  "type": "Color Temperature Light",
+  "type": "Extended color light",
   "name": "{{ name }}",
-  "modelid": "LTW011",
-  "swversion": "1.29.0_r21169"
+  "modelid": "LCT007",
+  "swversion": "5.105.0.21169"
 }

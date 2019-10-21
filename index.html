@@ -79,6 +79,15 @@
 
      <dt>payload.ct <span class="property-type">string</span></dt>
      <dd>The mired color temperature of the light (min 153, max 500)</dd>
+
+     <dt>payload.xy <span class="property-type">array</span></dt>
+     <dd>The x and y coordinates of a color in CIE color space (Both x and y are between 0 and 1)</dd>
+
+     <dt>payload.rgb <span class="property-type">array</span></dt>
+     <dd>The light color in RGB format</dd>
+
+     <dt>payload.colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
   </dl>
 
   <h3>Outputs</h3>
@@ -101,11 +110,14 @@
      <dt>ct <span class="property-type">string</span></dt>
      <dd>The mired color temperature of the light (min 153, max 500)</dd>
 
-     <dt>colormode <span class="property-type">string</span></dt>
-     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
+     <dt>xy <span class="property-type">array</span></dt>
+     <dd>The x and y coordinates of a color in CIE color space (Both x and y are between 0 and 1)</dd>
 
      <dt>rgb <span class="property-type">array</span></dt>
      <dd>The light color in RGB format</dd>
+
+     <dt>colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
 
      <dt>percentage <span class="property-type">number</span></dt>
      <dd>The brightness % level (min 1, max 100)</dd>
@@ -187,11 +199,14 @@
      <dt>ct <span class="property-type">string</span></dt>
      <dd>The mired color temperature of the light (min 153, max 500)</dd>
 
-     <dt>colormode <span class="property-type">string</span></dt>
-     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
+     <dt>xy <span class="property-type">array</span></dt>
+     <dd>The x and y coordinates of a color in CIE color space (Both x and y are between 0 and 1)</dd>
 
      <dt>rgb <span class="property-type">array</span></dt>
      <dd>The light color in RGB format</dd>
+
+     <dt>colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
 
      <dt>percentage <span class="property-type">number</span></dt>
      <dd>The brightness % level (min 1, max 100)</dd>
