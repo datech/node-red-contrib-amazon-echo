@@ -109,8 +109,10 @@ module.exports = function(RED) {
 
         var deviceAttributes = setDeviceAttributes(msg.payload.deviceid, msg.payload, meta, hubNode.context());
 
-        // Output only if 'Process and output' option is selected and state is changed
-        if (config.processinput == 2 && Object.keys(deviceAttributes.meta.changes).length > 0) {
+        // Output if
+        // 'Process and output' OR
+        // 'Process and output on state change' option is selected
+        if (config.processinput == 2 || (config.processinput == 3 && Object.keys(deviceAttributes.meta.changes).length > 0)) {
           payloadHandler(hubNode, msg.payload.deviceid);
         }
 
@@ -461,8 +463,6 @@ module.exports = function(RED) {
     var msg = getDeviceAttributes(deviceId, hubNode.context());
     msg.deviceid = deviceId;
     msg.topic = '';
-
-    console.log(msg);
 
     hubNode.send(msg);
   }
