@@ -30,7 +30,10 @@ module.exports = function(RED) {
     var port = config.port > 0 && config.port < 65536 ? config.port : 80;
 
     // Start SSDP service
-    ssdp(port, config);
+    var ssdpServer = ssdp(port, config);
+    if (config.discovery) {
+      ssdpServer.start();
+    }
 
     // Stoppable kill the server on deploy
     const graceMilliseconds = 500;
@@ -120,6 +123,10 @@ module.exports = function(RED) {
     });
 
     hubNode.on('close', function(removed, doneFunction) {
+      // Stop SSDP server
+      ssdpServer.stop();
+
+      // Stop HTTP server
       httpServer.stop(function() {
         if (typeof doneFunction === 'function')
           doneFunction();
@@ -291,7 +298,7 @@ module.exports = function(RED) {
     server.addUSN('upnp:rootdevice');
     server.addUSN('urn:schemas-upnp-org:device:basic:1');
 
-    server.start();
+    return server;
   }
 
   //

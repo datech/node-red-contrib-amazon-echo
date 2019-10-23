@@ -1,28 +1,39 @@
 <script type="text/javascript">
-    RED.nodes.registerType('amazon-echo-hub',{
-        category: "input",
-        color: "#31C4F3",
-        defaults: {
-            port: { value: "80", required: true, validate:
-              function(port) {
-                return port > 0 && port < 65536;
-              }
-            },
-            processinput: { value: 0 }
-        },
-        inputs: 1,
-        outputs: 1,
-        icon: "amazon-echo-hub.png",
-        label: function() {
-            return "Amazon Echo Hub";
+  RED.nodes.registerType('amazon-echo-hub', {
+    category: "input",
+    color: "#31C4F3",
+    defaults: {
+      port: {
+        value: "80",
+        required: true,
+        validate: function(port) {
+          return port > 0 && port < 65536;
         }
-    });
+      },
+      processinput: {
+        value: 0
+      },
+      discovery: {
+        value: true
+      }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "amazon-echo-hub.png",
+    label: function() {
+      return "Amazon Echo Hub";
+    }
+  });
 </script>
 
 <script type="text/x-red" data-template-name="amazon-echo-hub">
-    <style media="screen">
+  <style media="screen">
       .form-row label {
-        width: 120px;
+        width: 140px;
+      }
+      .form-row input,
+      .form-row select {
+        width: 260px;
       }
     </style>
     <div class="form-row">
@@ -37,6 +48,10 @@
           <option value="2">Process and output</option>
           <option value="3">Process and output on state change</option>
         </select>
+    </div>
+    <div class="form-row">
+      <label for="node-input-discovery"><i class="fa fa-search"></i> Device discovery</label>
+      <input type="checkbox" id="node-input-discovery">
     </div>
     <div class="form-tips">
       Tips:
@@ -55,9 +70,7 @@
   <h3>Inputs</h3>
   Enable input processing to allow input payload signals
   <dl class="message-properties">
-      <dt>payload
-          <span class="property-type">string | buffer</span>
-      </dt>
+      <dt>payload <span class="property-type">string | buffer</span></dt>
       <dd> the payload of the message to publish</dd>
 
       <dt>payload.nodeid <span class="property-type">string</span></dt>
@@ -148,24 +161,30 @@
 
 
 <script type="text/javascript">
-    RED.nodes.registerType('amazon-echo-device',{
-        category: "input",
-        color: "#31C4F3",
-        defaults: {
-            name: {value:"", required:true},
-            topic: {value:"", required:false},
-        },
-        inputs:1,
-        outputs:1,
-        icon: "amazon-echo-device.png",
-        label: function() {
-            return this.name || "Amazon Echo Device";
-        }
-    });
+  RED.nodes.registerType('amazon-echo-device', {
+    category: "input",
+    color: "#31C4F3",
+    defaults: {
+      name: {
+        value: "",
+        required: true
+      },
+      topic: {
+        value: "",
+        required: false
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "amazon-echo-device.png",
+    label: function() {
+      return this.name || "Amazon Echo Device";
+    }
+  });
 </script>
 
 <script type="text/x-red" data-template-name="amazon-echo-device">
-    <div class="form-row">
+  <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Bedroom light">
     </div>
