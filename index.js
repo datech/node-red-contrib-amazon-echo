@@ -5,6 +5,7 @@ module.exports = function(RED) {
   const path = require('path');
   const State = require(path.join(__dirname, '/api/hue/model/lights/State.js'));
   const Info = require(path.join(__dirname, '/api/hue/model/lights/Info.js'));
+  const SetResponse = require(path.join(__dirname, '/api/hue/model/lights/SetResponse.js'));
 
   function AmazonEchoDeviceNode(config) {
     RED.nodes.createNode(this, config);
@@ -257,7 +258,7 @@ module.exports = function(RED) {
 
     app.put('/api/:username/lights/:id/state', function(req, res) {
 
-      var meta = {
+      const meta = {
         insert: {
           by: 'alexa',
           details: {
@@ -270,26 +271,40 @@ module.exports = function(RED) {
       };
 
       setDeviceAttributes(req.params.id, req.body, meta, hubNode.context());
+      const data = getDeviceAttributes(req.params.id, hubNode.context());
 
       var device = getDevice(req.params.id);
 
-      var template;
+      const output = new SetResponse();
+      output.success('on', data.on);
+      output.success('bri', data.bri);
+
       switch (device.devtype) {
-        case 1:
-          // Color Temperature Light.
-          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/ct/set-state.json', 'utf8').toString();
+        case '1':   // Color Temperature Light.
+          output.success('ct', data.ct);
+          if (req.body.hasOwnProperty('hue')) {
+            output.error('hue', data.hue);
+          }
+          if (req.body.hasOwnProperty('sat')) {
+            output.error('sat', data.sat);
+          }
           break;
-        case 2: // Dimmable light.
-          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/dimmable/set-state.json', 'utf8').toString();
+        case '2': // Dimmable light.
+          if (req.body.hasOwnProperty('ct')) {
+            output.error('ct', data.ct);
+          }
+          if (req.body.hasOwnProperty('hue')) {
+            output.error('hue', data.hue);
+          }
+          if (req.body.hasOwnProperty('sat')) {
+            output.error('sat', data.sat);
+          }
           break;
         default: // Extended Color Light (default).
-          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/rgbw/set-state.json', 'utf8').toString();
+          output.success('ct', data.ct);
+          output.success('hue', data.hue);
+          output.success('sat', data.sat);
       }
-
-      var data = getDeviceAttributes(req.params.id, hubNode.context());
-
-      var output = Mustache.render(template, data);
-      output = JSON.parse(output);
 
       res.json(output);
 

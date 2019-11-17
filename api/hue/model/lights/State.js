@@ -35,7 +35,7 @@ module.exports = class State {
    * @returns {State}
    */
   static forDimmable(on, bri) {
-    return new State(on, bri, null, null, null, 'ct')
+    return new State(on, bri, null, null, null, 'ct');
   }
 
   /**
@@ -47,7 +47,7 @@ module.exports = class State {
    * @returns {State}
    */
   static forCT(on, bri, ct) {
-    return new State(on, bri, null, null, ct, 'ct')
+    return new State(on, bri, null, null, ct, 'ct');
   }
 
   /**
@@ -60,7 +60,7 @@ module.exports = class State {
    * @returns {State}
    */
   static forRGB(on, bri, hue, sat) {
-    return new State(on, bri, hue, sat, null, 'hs')
+    return new State(on, bri, hue, sat, null, 'hs');
   }
 
   /**
@@ -75,6 +75,6 @@ module.exports = class State {
    * @returns {State}
    */
   static forRGBW(on, bri, hue, sat, ct, mode) {
-    return new State(on, bri, hue, sat, ct, mode)
+    return new State(on, bri, hue, sat, ct, mode);
   }
 };
