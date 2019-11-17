@@ -2,6 +2,9 @@ module.exports = function(RED) {
   'use strict';
 
   const HueColor = require('hue-colors').default;
+  const path = require('path');
+  const State = require(path.join(__dirname, '/api/hue/model/lights/State.js'));
+  const Info = require(path.join(__dirname, '/api/hue/model/lights/Info.js'));
 
   function AmazonEchoDeviceNode(config) {
     RED.nodes.createNode(this, config);
@@ -222,7 +225,7 @@ module.exports = function(RED) {
       var data = {
         lights: getDevicesAttributes(hubNode.context()),
         date: new Date().toISOString().split('.').shift()
-      }
+      };
 
       var output = Mustache.render(template, data);
       output = JSON.parse(output);
@@ -234,27 +237,22 @@ module.exports = function(RED) {
     app.get('/api/:username/lights/:id', function(req, res) {
       var device = getDevice(req.params.id);
 
-      var template;
+      var data = getDeviceAttributes(req.params.id, hubNode.context());
+      var state = new State(data.on, data.bri, data.hue, data.sat, data.ct, data.colormode);
+
+      var info;
       switch (device.devtype) {
-        case 1:
-          // Color Temperature Light.
-          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/ct/get-state.json', 'utf8').toString();
+        case '1': // Color Temperature Light.
+          info = Info.forCT(device.name, state);
           break;
-        case 2: // Dimmable light.
-          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/dimmable/get-state.json', 'utf8').toString();
+        case '2': // Dimmable light.
+          info = Info.forDimmable(device.name, state);
           break;
         default: // Extended Color Light (default).
-          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/rgbw/get-state.json', 'utf8').toString();
+          info = Info.forRGBW(device.name, state);
       }
 
-      var data = getDeviceAttributes(req.params.id, hubNode.context());
-      data.name = device.name;
-      data.date = new Date().toISOString().split('.').shift();
-
-      var output = Mustache.render(template, data);
-      output = JSON.parse(output);
-
-      res.json(output);
+      res.json(info);
     });
 
     app.put('/api/:username/lights/:id/state', function(req, res) {
