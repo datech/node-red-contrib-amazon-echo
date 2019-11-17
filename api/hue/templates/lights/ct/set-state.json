@@ -1,0 +1,7 @@
+[
+  {"success":{"/lights/1/state/bri": {{ bri }} }},
+  {"success":{"/lights/1/state/on": {{ on }} }},
+  {"error":{"/lights/1/state/hue": {{ hue }} }},
+  {"error":{"/lights/1/state/sat": {{ sat }} }},
+  {"success":{"/lights/1/state/ct": {{ ct }} }}
+]

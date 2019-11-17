@@ -1,0 +1,18 @@
+{
+  "state": {
+      "on": {{ on }},
+      "bri": {{ bri }},
+      "effect": "none",
+      "alert": "none",
+      "mode": "homeautomation",
+      "reachable": true
+  },
+  "swupdate": {
+      "state": "noupdates",
+      "lastinstall": "{{ date }}"
+  },
+  "type": "Dimmable Light",
+  "name": "{{ name }}",
+  "modelid": "LWB007",
+  "swversion": "66012040"
+}

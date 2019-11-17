@@ -1,0 +1,20 @@
+{
+  "state": {
+      "on": {{ on }},
+      "bri": {{ bri }},
+      "effect": "none",
+      "ct": {{ ct }},
+      "alert": "none",
+      "colormode": "{{ colormode }}",
+      "mode": "homeautomation",
+      "reachable": true
+  },
+  "swupdate": {
+      "state": "noupdates",
+      "lastinstall": "{{ date }}"
+  },
+  "type": "Color Temperature Light",
+  "name": "{{ name }}",
+  "modelid": "LTW012",
+  "swversion": "1.29.0_r21169"
+}

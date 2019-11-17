@@ -232,17 +232,23 @@ module.exports = function(RED) {
     });
 
     app.get('/api/:username/lights/:id', function(req, res) {
-      var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/get-state.json', 'utf8').toString();
+      var device = getDevice(req.params.id);
 
-      var deviceName = '';
-
-      getDevices().forEach(function(device) {
-        if (req.params.id == device.id)
-          deviceName = device.name
-      });
+      var template;
+      switch (device.devtype) {
+        case 1:
+          // Color Temperature Light.
+          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/ct/get-state.json', 'utf8').toString();
+          break;
+        case 2: // Dimmable light.
+          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/dimmable/get-state.json', 'utf8').toString();
+          break;
+        default: // Extended Color Light (default).
+          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/rgbw/get-state.json', 'utf8').toString();
+      }
 
       var data = getDeviceAttributes(req.params.id, hubNode.context());
-      data.name = deviceName;
+      data.name = device.name;
       data.date = new Date().toISOString().split('.').shift();
 
       var output = Mustache.render(template, data);
@@ -263,11 +269,24 @@ module.exports = function(RED) {
             user_agent: req.headers['user-agent']
           }
         }
-      }
+      };
 
       setDeviceAttributes(req.params.id, req.body, meta, hubNode.context());
 
-      var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/set-state.json', 'utf8').toString();
+      var device = getDevice(req.params.id);
+
+      var template;
+      switch (device.devtype) {
+        case 1:
+          // Color Temperature Light.
+          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/ct/set-state.json', 'utf8').toString();
+          break;
+        case 2: // Dimmable light.
+          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/dimmable/set-state.json', 'utf8').toString();
+          break;
+        default: // Extended Color Light (default).
+          template = fs.readFileSync(__dirname + '/api/hue/templates/lights/rgbw/set-state.json', 'utf8').toString();
+      }
 
       var data = getDeviceAttributes(req.params.id, hubNode.context());
 
@@ -344,16 +363,27 @@ module.exports = function(RED) {
 
     var devices = [];
 
-    RED.nodes.eachNode(function(node) {
+    RED.nodes.eachNode(function (node) {
       if (node.type == 'amazon-echo-device') {
         devices.push({
           id: formatUUID(node.id),
-          name: node.name
+          name: node.name,
+          type: node.type,
+          devtype: node.devtype
         });
       }
     });
 
     return devices;
+  }
+
+  function getDevice(id) {
+    getDevices().forEach(d => {
+      if (req.params.id === d.id) {
+        return d;
+      }
+    });
+    return null;
   }
 
   function getDeviceAttributes(id, context) {
