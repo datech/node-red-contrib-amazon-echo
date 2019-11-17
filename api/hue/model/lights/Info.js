@@ -21,7 +21,35 @@ module.exports = class Info {
     this.swupdate = {
       state: 'noupdates',
       lastinstall: new Date().toISOString().split('.').shift()
-    }
+    };
+  }
+
+  /**
+   * Add device capabilities to info.
+   *
+   * @param {Capabilities} capabilities
+   * @returns {Info}
+   */
+  withCapabilities(capabilities) {
+    this.capabilities = capabilities;
+    return this;
+  }
+
+  /**
+   * Add extended information.
+   *
+   * @returns {Info}
+   */
+  extended() {
+    this.manufacturername = 'Philips';
+    this.productname = 'Hue color lamp';
+    this.config = {
+      archetype: 'sultanbulb',
+      function: 'mixed',
+      direction: 'omnidirectional'
+    };
+    this.uniqueid = '00:11:22:33:44:55:66:77-88';
+    return this;
   }
 
   /**

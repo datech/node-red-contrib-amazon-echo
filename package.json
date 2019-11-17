@@ -32,7 +32,6 @@
     "node-persist": "^3.0.2",
     "node-ssdp": "^4.0.0",
     "stoppable": "^1.0.4",
-    "mustache": "^3.0.1",
     "express": "^4.16.4",
     "body-parser": "^1.18.3",
     "hue-colors": "^0.5.2"

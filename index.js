@@ -6,6 +6,9 @@ module.exports = function(RED) {
   const State = require(path.join(__dirname, '/api/hue/model/lights/State.js'));
   const Info = require(path.join(__dirname, '/api/hue/model/lights/Info.js'));
   const SetResponse = require(path.join(__dirname, '/api/hue/model/lights/SetResponse.js'));
+  const Capabilities = require(path.join(__dirname, '/api/hue/model/lights/Capabilities.js'));
+  const GlobalState = require(path.join(__dirname, '/api/hue/model/State.js'));
+  const Registration = require(path.join(__dirname, '/api/hue/model/Registration.js'));
 
   function AmazonEchoDeviceNode(config) {
     RED.nodes.createNode(this, config);
@@ -188,49 +191,44 @@ module.exports = function(RED) {
     });
 
     app.post('/api', function(req, res) {
-      var template = fs.readFileSync(__dirname + '/api/hue/templates/registration.json', 'utf8').toString();
-
-      var data = {
-        username: 'c6260f982b43a226b5542b967f612ce'
-      };
-
-      var output = Mustache.render(template, data);
-      output = JSON.parse(output);
-
+      const output = new Registration();
+      output.success('c6260f982b43a226b5542b967f612ce');
       res.json(output);
     });
 
     app.get('/api/:username', function(req, res) {
-      var lightsTemplate = fs.readFileSync(__dirname + '/api/hue/templates/lights/all.json', 'utf8').toString();
-      var template = fs.readFileSync(__dirname + '/api/hue/templates/state.json', 'utf8').toString();
-
-      var data = {
-        lights: getDevicesAttributes(hubNode.context()),
-        address: req.hostname,
-        username: req.params.username,
-        date: new Date().toISOString().split('.').shift()
-      }
-
-      var output = Mustache.render(template, data, {
-        lightsTemplate: lightsTemplate
+      const lights = getDevicesAttributes(hubNode.context()).map(d => {
+        const state = new State(d.on, d.bri, d.hue, d.sat, d.ct, d.colormode);
+        switch (d.devtype) {
+          case '1': // Color Temperature Light.
+            return Info.forCT(d.name, state).extended().withCapabilities(Capabilities.forCT());
+          case '2': // Dimmable light.
+            return Info.forDimmable(d.name, state).extended().withCapabilities(Capabilities.forDimmable());
+          default: // Extended Color Light (default).
+            return Info.forRGBW(d.name, state).extended().withCapabilities(Capabilities.forRGBW());
+        }
       });
-      output = JSON.parse(output);
-      delete output.lights.last;
+
+      const output = new GlobalState(req.hostname, req.params.username).withLights(lights);
 
       res.json(output);
     });
 
     app.get('/api/:username/lights', function(req, res) {
-      var template = fs.readFileSync(__dirname + '/api/hue/templates/lights/all.json', 'utf8').toString();
-
-      var data = {
-        lights: getDevicesAttributes(hubNode.context()),
-        date: new Date().toISOString().split('.').shift()
+      const lights = getDevicesAttributes(hubNode.context()).map(d => {
+        const state = new State(d.on, d.bri, d.hue, d.sat, d.ct, d.colormode);
+        switch (d.devtype) {
+          case '1': // Color Temperature Light.
+            return Info.forCT(d.name, state).extended().withCapabilities(Capabilities.forCT());
+          case '2': // Dimmable light.
+            return Info.forDimmable(d.name, state).extended().withCapabilities(Capabilities.forDimmable());
+          default: // Extended Color Light (default).
+            return Info.forRGBW(d.name, state).extended().withCapabilities(Capabilities.forRGBW());
+        }
+      });
+      const output = {
+          lights: lights
       };
-
-      var output = Mustache.render(template, data);
-      output = JSON.parse(output);
-      delete output.last;
 
       res.json(output);
     });
