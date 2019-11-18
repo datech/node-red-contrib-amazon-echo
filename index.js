@@ -390,7 +390,7 @@ module.exports = function(RED) {
 
   function getDevice(id) {
     getDevices().forEach(d => {
-      if (req.params.id === d.id) {
+      if (id === d.id) {
         return d;
       }
     });
