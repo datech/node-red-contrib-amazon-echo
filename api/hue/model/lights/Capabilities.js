@@ -31,20 +31,11 @@ module.exports = class Capabilities {
     }
 
     if (color) {
-      this.control.colorgamuttype = 'A';
+      this.control.colorgamuttype = 'B';
       this.control.colorgamut = [
-        [
-          0.675,
-          0.322
-        ],
-        [
-          0.409,
-          0.518
-        ],
-        [
-          0.167,
-          0.04
-        ]
+        [0.675, 0.322],
+        [0.409, 0.518],
+        [0.167, 0.04]
       ];
     }
   }
