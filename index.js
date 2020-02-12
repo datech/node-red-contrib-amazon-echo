@@ -389,11 +389,11 @@ module.exports = function(RED) {
   }
 
   function getDevice(id) {
-    getDevices().forEach(d => {
+    for (let d of getDevices()) {
       if (id === d.id) {
         return d;
       }
-    });
+    }
     return null;
   }
 
