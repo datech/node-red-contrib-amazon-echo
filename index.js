@@ -205,7 +205,7 @@ module.exports = function(RED) {
         address: req.hostname,
         username: req.params.username,
         date: new Date().toISOString().split('.').shift(),
-        uniqueid: function () {
+        uniqueid: function() {
           return hueUniqueId(this.id);
         }
       }
@@ -225,7 +225,7 @@ module.exports = function(RED) {
       var data = {
         lights: getDevicesAttributes(hubNode.context()),
         date: new Date().toISOString().split('.').shift(),
-        uniqueid: function () {
+        uniqueid: function() {
           return hueUniqueId(this.id);
         }
       }
@@ -340,7 +340,7 @@ module.exports = function(RED) {
   }
 
   function hueUniqueId(id) {
-    return (id + '0000').replace(/(.{2})/g,"$1:").substring(0, 23) + '-00';
+    return (id + '0000').replace(/(.{2})/g, "$1:").substring(0, 23) + '-00';
   }
 
   function getHueHubId(config) {
