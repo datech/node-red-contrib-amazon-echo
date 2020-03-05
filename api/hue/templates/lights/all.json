@@ -61,7 +61,7 @@
             "function": "mixed",
             "direction": "omnidirectional"
         },
-        "uniqueid": "00:11:22:33:44:55:66:77-88",
+        "uniqueid": "{{ uniqueid }}",
         "swversion": "5.105.0.21169"
     },
   {{/lights}}

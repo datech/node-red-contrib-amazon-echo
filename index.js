@@ -101,7 +101,7 @@ module.exports = function(RED) {
 
       if (config.processinput > 0 && nodeDeviceId !== null) {
 
-        msg.payload.deviceid = formatUUID(nodeDeviceId);
+        var deviceid = formatUUID(nodeDeviceId);
 
         var meta = {
           insert: {
@@ -110,13 +110,13 @@ module.exports = function(RED) {
           }
         }
 
-        var deviceAttributes = setDeviceAttributes(msg.payload.deviceid, msg.payload, meta, hubNode.context());
+        var deviceAttributes = setDeviceAttributes(deviceid, msg.payload, meta, hubNode.context());
 
         // Output if
         // 'Process and output' OR
         // 'Process and output on state change' option is selected
         if (config.processinput == 2 || (config.processinput == 3 && Object.keys(deviceAttributes.meta.changes).length > 0)) {
-          payloadHandler(hubNode, msg.payload.deviceid);
+          payloadHandler(hubNode, deviceid);
         }
 
       }
@@ -204,7 +204,10 @@ module.exports = function(RED) {
         lights: getDevicesAttributes(hubNode.context()),
         address: req.hostname,
         username: req.params.username,
-        date: new Date().toISOString().split('.').shift()
+        date: new Date().toISOString().split('.').shift(),
+        uniqueid: function () {
+          return hueUniqueId(this.id);
+        }
       }
 
       var output = Mustache.render(template, data, {
@@ -221,7 +224,10 @@ module.exports = function(RED) {
 
       var data = {
         lights: getDevicesAttributes(hubNode.context()),
-        date: new Date().toISOString().split('.').shift()
+        date: new Date().toISOString().split('.').shift(),
+        uniqueid: function () {
+          return hueUniqueId(this.id);
+        }
       }
 
       var output = Mustache.render(template, data);
@@ -331,6 +337,10 @@ module.exports = function(RED) {
     if (id === null || id === undefined)
       return '';
     return ('' + id).replace('.', '').trim();
+  }
+
+  function hueUniqueId(id) {
+    return (id + '0000').replace(/(.{2})/g,"$1:").substring(0, 23) + '-00';
   }
 
   function getHueHubId(config) {
