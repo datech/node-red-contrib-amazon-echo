@@ -24,7 +24,8 @@
   "license": "MIT",
   "node-red": {
     "nodes": {
-      "alexa-local-hub": "index.js"
+      "amazon-echo-device": "nodes/amazon-echo-device.js",
+      "amazon-echo-hub": "nodes/amazon-echo-hub.js"
     }
   },
   "dependencies": {

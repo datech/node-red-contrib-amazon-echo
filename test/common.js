@@ -1,6 +1,7 @@
-const helper = require("node-red-node-test-helper");
 const request = require('supertest');
-const amazonEcho = require("../index.js");
+const helper = require("node-red-node-test-helper");
+const amazonEchoHub = require("../nodes/amazon-echo-hub.js");
+const amazonEchoDevice = require("../nodes/amazon-echo-device.js");
 
 var flow = [{
     "id": "00000000.000000",
@@ -37,7 +38,8 @@ var flow = [{
   }
 ];
 
-exports.helper = helper;
 exports.request = request;
-exports.amazonEcho = amazonEcho;
+exports.helper = helper;
+exports.amazonEchoHub = amazonEchoHub;
+exports.amazonEchoDevice = amazonEchoDevice;
 exports.flow = flow;

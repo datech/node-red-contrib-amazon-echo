@@ -1,0 +1,93 @@
+<script type="text/javascript">
+  RED.nodes.registerType('amazon-echo-device', {
+    category: "input",
+    color: "#31C4F3",
+    defaults: {
+      name: {
+        value: "",
+        required: true
+      },
+      topic: {
+        value: "",
+        required: false
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "amazon-echo-device.png",
+    label: function() {
+      return this.name || "Amazon Echo Device";
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="amazon-echo-device">
+  <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Bedroom light">
+    </div>
+    <div class="form-tips">Alexa uses this <strong>Name</strong> to indentify your device by voice. This has to be unique for each device. If you have renamed your device, please ask Alexa to discover again.</div>
+    <p></p>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
+        <input type="text" id="node-input-topic">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="amazon-echo-device">
+  <p>Amazon Echo Device</p>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+     <dt>payload <span class="property-type">string</span></dt>
+     <dd>On state of the light (On - true, Off - false)</dd>
+
+     <dt>on <span class="property-type">boolean</span></dt>
+     <dd>On/Off state of the light</dd>
+
+     <dt>bri <span class="property-type">number</span></dt>
+     <dd>Brightness of the light (min 1, max 254)</dd>
+
+     <dt>hue <span class="property-type">number</span></dt>
+     <dd>Hue of the light (min 0, max 65535)</dd>
+
+     <dt>sat <span class="property-type">number</span></dt>
+     <dd>Saturation of the light (min 0, max 254)</dd>
+
+     <dt>ct <span class="property-type">string</span></dt>
+     <dd>The mired color temperature of the light (min 153, max 500)</dd>
+
+     <dt>xy <span class="property-type">array</span></dt>
+     <dd>The x and y coordinates of a color in CIE color space (Both x and y are between 0 and 1)</dd>
+
+     <dt>rgb <span class="property-type">array</span></dt>
+     <dd>The light color in RGB format</dd>
+
+     <dt>colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
+
+     <dt>percentage <span class="property-type">number</span></dt>
+     <dd>The brightness % level (min 1, max 100)</dd>
+
+     <dt>meta <span class="property-type">array</span></dt>
+     <dd>Meta data hashmap</dd>
+
+     <dt>meta.insert.by <span class="property-type">string</span></dt>
+     <dd>The insert type (alexa | input)</dd>
+
+     <dt>meta.insert.date <span class="property-type">string</span></dt>
+     <dd>The insert date and time</dd>
+
+     <dt>meta.insert.details.ip <span class="property-type">string</span></dt>
+     <dd>Alexa master device IP address.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></li></dd>
+
+     <dt>meta.insert.details.user_agent <span class="property-type">string</span></dt>
+     <dd>Alexa master device user agent.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></dd>
+
+     <dt>meta.input <span class="property-type">array</span></dt>
+     <dd>Hashmap with all input attributes</dd>
+
+     <dt>meta.changes <span class="property-type">array</span></dt>
+     <dd>Hashmap of all changed attributes and the corresponding old values</dd>
+  </dl>
+</script>

@@ -1,9 +1,11 @@
-var common = require("../common.js");
+var common = require("../../common.js");
 
-var helper = common.helper;
 var request = common.request;
-var amazonEcho = common.amazonEcho;
+var helper = common.helper;
 var flow = common.flow;
+
+var amazonEchoHub = common.amazonEchoHub;
+var amazonEchoDevice = common.amazonEchoDevice;
 
 var apiURL = "http://localhost:" + flow[1].port;
 
@@ -11,7 +13,7 @@ describe('Amazon Echo Hub', function() {
 
   it('switch off', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -53,7 +55,7 @@ describe('Amazon Echo Hub', function() {
 
   it('switch on', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -97,7 +99,7 @@ describe('Amazon Echo Hub', function() {
 
   it('brightness to 10%', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -143,7 +145,7 @@ describe('Amazon Echo Hub', function() {
 
   it('color to warm white', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -191,7 +193,7 @@ describe('Amazon Echo Hub', function() {
 
   it('HS color to cyan', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -246,7 +248,7 @@ describe('Amazon Echo Hub', function() {
 
   it('XY color to cyan', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -299,7 +301,7 @@ describe('Amazon Echo Hub', function() {
 
   it('RGB color to cyan', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -352,7 +354,7 @@ describe('Amazon Echo Hub', function() {
 
   it('meta details', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -395,7 +397,7 @@ describe('Amazon Echo Hub', function() {
 
     flow[1].processinput = 0;
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -426,7 +428,7 @@ describe('Amazon Echo Hub', function() {
 
     flow[1].processinput = 1;
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("00000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -465,7 +467,7 @@ describe('Amazon Echo Hub', function() {
 
     flow[1].processinput = 3;
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var msgCount = 0;
         var hub = helper.getNode("00000000.000001");

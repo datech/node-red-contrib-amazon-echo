@@ -1,9 +1,11 @@
-var common = require("../common.js");
+var common = require("../../common.js");
 
-var helper = common.helper;
 var request = common.request;
-var amazonEcho = common.amazonEcho;
+var helper = common.helper;
 var flow = common.flow;
+
+var amazonEchoHub = common.amazonEchoHub;
+var amazonEchoDevice = common.amazonEchoDevice;
 
 var apiURL = "http://localhost:" + flow[1].port;
 
@@ -11,7 +13,7 @@ describe('Philips Hue REST API ', function() {
 
   it('description', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/description.xml')
@@ -32,7 +34,7 @@ describe('Philips Hue REST API ', function() {
 
   it('registration', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .post('/api')
@@ -57,7 +59,7 @@ describe('Philips Hue REST API ', function() {
 
   it('get state', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/api/c6260f982b43a226b5542b967f612ce')
@@ -78,7 +80,7 @@ describe('Philips Hue REST API ', function() {
 
   it('get lights', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/api/c6260f982b43a226b5542b967f612ce/lights')
@@ -99,7 +101,7 @@ describe('Philips Hue REST API ', function() {
 
   it('get light state', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/api/c6260f982b43a226b5542b967f612ce/lights/00000000000002')
@@ -120,7 +122,7 @@ describe('Philips Hue REST API ', function() {
 
   it('switch off', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("000000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -172,7 +174,7 @@ describe('Philips Hue REST API ', function() {
 
   it('switch on', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("000000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -226,7 +228,7 @@ describe('Philips Hue REST API ', function() {
 
   it('brightness to 10%', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("000000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -283,7 +285,7 @@ describe('Philips Hue REST API ', function() {
 
   it('color to warm white', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("000000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -342,7 +344,7 @@ describe('Philips Hue REST API ', function() {
 
   it('HS color to cyan', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("000000000.000001");
         var bulb = helper.getNode("00000000.000002");
@@ -412,7 +414,7 @@ describe('Philips Hue REST API ', function() {
 
   it('meta details', function(done) {
 
-    helper.load(amazonEcho, flow, function() {
+    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var hub = helper.getNode("000000000.000001");
         var bulb = helper.getNode("00000000.000002");

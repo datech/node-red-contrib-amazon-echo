@@ -1,8 +1,6 @@
 var common = require("./common.js");
 
 var helper = common.helper;
-var request = common.request;
-var amazonEcho = common.amazonEcho;
 
 helper.init(require.resolve('node-red'));
 
@@ -20,8 +18,7 @@ describe('Amazon Echo Hub Node', function() {
     helper.unload();
   });
 
-  require('./api/hue.js');
-  require('./input/hub.js');
-
+  require('./nodes/hub/10-input_spec.js');
+  require('./nodes/hub/11-philips-hue_spec.js');
 
 });

@@ -1,0 +1,160 @@
+<script type="text/javascript">
+  RED.nodes.registerType('amazon-echo-hub', {
+    category: "input",
+    color: "#31C4F3",
+    defaults: {
+      port: {
+        value: "80",
+        required: true,
+        validate: function(port) {
+          return port > 0 && port < 65536;
+        }
+      },
+      processinput: {
+        value: 0
+      },
+      discovery: {
+        value: true
+      }
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "amazon-echo-hub.png",
+    label: function() {
+      return "Amazon Echo Hub";
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="amazon-echo-hub">
+  <style media="screen">
+      .form-row label {
+        width: 140px;
+      }
+      .form-row input,
+      .form-row select {
+        width: 260px;
+      }
+    </style>
+    <div class="form-row">
+        <label for="node-input-port"><i class="fa fa-globe"></i> Port</label>
+        <input type="text" id="node-input-port" placeholder="80">
+    </div>
+    <div class="form-row">
+        <label for="node-input-processinput"><i class="fa fa-tag"></i> Process Input</label>
+        <select class="form-control" id="node-input-processinput">
+          <option value="0">No</option>
+          <option value="1">Process</option>
+          <option value="2">Process and output</option>
+          <option value="3">Process and output on state change</option>
+        </select>
+    </div>
+    <div class="form-row">
+      <label for="node-input-discovery"><i class="fa fa-search"></i> Device discovery</label>
+      <input type="checkbox" id="node-input-discovery">
+    </div>
+    <div class="form-tips">
+      Tips:
+      <p>
+        <ul>
+          <li>Set port to <strong>80</strong> if you have latest generation Amazon Echo devices.</li>
+          <li>Set process input if you want to send signal to Amazon Echo Hub.</li>
+        </ul>
+      </p>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="amazon-echo-hub">
+  <p>Amazon Echo Hub</p>
+
+  <h3>Inputs</h3>
+  Enable input processing to allow input payload signals
+  <dl class="message-properties">
+      <dt>payload <span class="property-type">string | buffer</span></dt>
+      <dd> the payload of the message to publish</dd>
+
+      <dt>payload.nodeid <span class="property-type">string</span></dt>
+      <dd>Node ID is Amazon Echo Device Node ID</dd>
+
+      <dt>payload.nodename <span class="property-type">string</span></dt>
+      <dd>Node Name is Amazon Echo Device Node Name. If payload.nodeid is set, it will be used instead</dd>
+
+     <dt>payload.on <span class="property-type">boolean</span></dt>
+     <dd>On state of the light (On - true, Off - false)</dd>
+
+     <dt>payload.bri <span class="property-type">number</span></dt>
+     <dd>Brightness of the light (min 1, max 254)</dd>
+
+     <dt>payload.hue <span class="property-type">number</span></dt>
+     <dd>Hue of the light (min 0, max 65535)</dd>
+
+     <dt>payload.sat <span class="property-type">number</span></dt>
+     <dd>Saturation of the light (min 0, max 65535)</dd>
+
+     <dt>payload.ct <span class="property-type">string</span></dt>
+     <dd>The mired color temperature of the light (min 153, max 500)</dd>
+
+     <dt>payload.xy <span class="property-type">array</span></dt>
+     <dd>The x and y coordinates of a color in CIE color space (Both x and y are between 0 and 1)</dd>
+
+     <dt>payload.rgb <span class="property-type">array</span></dt>
+     <dd>The light color in RGB format</dd>
+
+     <dt>payload.colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+     <dt>payload <span class="property-type">string</span></dt>
+     <dd>State of the light (on, off)</dd>
+
+     <dt>on <span class="property-type">boolean</span></dt>
+     <dd>On state of the light (On - true, Off - false)</dd>
+
+     <dt>bri <span class="property-type">number</span></dt>
+     <dd>Brightness of the light (min 1, max 254)</dd>
+
+     <dt>hue <span class="property-type">number</span></dt>
+     <dd>Hue of the light (min 0, max 65535)</dd>
+
+     <dt>sat <span class="property-type">number</span></dt>
+     <dd>Saturation of the light (min 0, max 254)</dd>
+
+     <dt>ct <span class="property-type">string</span></dt>
+     <dd>The mired color temperature of the light (min 153, max 500)</dd>
+
+     <dt>xy <span class="property-type">array</span></dt>
+     <dd>The x and y coordinates of a color in CIE color space (Both x and y are between 0 and 1)</dd>
+
+     <dt>rgb <span class="property-type">array</span></dt>
+     <dd>The light color in RGB format</dd>
+
+     <dt>colormode <span class="property-type">string</span></dt>
+     <dd>Indicates the color mode (ct - Color Temperature | hs - Hue and Saturation)</dd>
+
+     <dt>percentage <span class="property-type">number</span></dt>
+     <dd>The brightness % level (min 1, max 100)</dd>
+
+     <dt>meta <span class="property-type">array</span></dt>
+     <dd>Meta data hashmap</dd>
+
+     <dt>meta.insert.by <span class="property-type">string</span></dt>
+     <dd>The insert type (alexa | input)</dd>
+
+     <dt>meta.insert.date <span class="property-type">string</span></dt>
+     <dd>The insert date and time</dd>
+
+     <dt>meta.insert.details.ip <span class="property-type">string</span></dt>
+     <dd>Alexa master device IP address.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></li></dd>
+
+     <dt>meta.insert.details.user_agent <span class="property-type">string</span></dt>
+     <dd>Alexa master device user agent.<br/>Only if <b>meta.insert.by</b>=<i>alexa</i></dd>
+
+     <dt>meta.input <span class="property-type">array</span></dt>
+     <dd>Hashmap with all input attributes</dd>
+
+     <dt>meta.changes <span class="property-type">array</span></dt>
+     <dd>Hashmap of all changed attributes and the corresponding old values</dd>
+  </dl>
+</script>
