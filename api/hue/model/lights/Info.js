@@ -5,6 +5,7 @@ module.exports = class Info {
   /**
    * Constructor.
    *
+   * @param {string} uid   Device unique ID.
    * @param {string} name  Device name.
    * @param {State}  state State information.
    * @param {string} type  Device type.
@@ -38,9 +39,10 @@ module.exports = class Info {
   /**
    * Add extended information.
    *
+   * @param {string} uniqueid   Device unique ID.
    * @returns {Info}
    */
-  extended() {
+  extended(uniqueid) {
     this.manufacturername = 'Philips';
     this.productname = 'Hue color lamp';
     this.config = {
@@ -48,43 +50,46 @@ module.exports = class Info {
       function: 'mixed',
       direction: 'omnidirectional'
     };
-    this.uniqueid = '00:11:22:33:44:55:66:77-88';
+    this.uniqueid = uniqueid;
     return this;
   }
 
   /**
    * Create Info object for RGBW light.
    *
+   * @param {string} uid   Device unique ID.
    * @param {string} name  Device name.
    * @param {State}  state State information
    * @returns {Info} Info object.
    * @constructor
    */
-  static forRGBW(name, state) {
-    return new Info(name, state, 'Extended color light', 'LCT007', '5.105.0.21169');
+  static forRGBW(uid, name, state) {
+    return new Info(uid, name, state, 'Extended color light', 'LCT007', '5.105.0.21169');
   }
 
   /**
    * Create Info object for CT light.
    *
+   * @param {string} uid   Device unique ID.
    * @param {string} name  Device name.
    * @param {State}  state State information
    * @returns {Info} Info object.
    * @constructor
    */
-  static forCT(name, state) {
-    return new Info(name, state, 'Color Temperature Light', 'LTW012', '1.29.0_r21169');
+  static forCT(uid, name, state) {
+    return new Info(uid, name, state, 'Color Temperature Light', 'LTW012', '1.29.0_r21169');
   }
 
   /**
    * Create Info object for a dimmable, fixed color light.
    *
+   * @param {string} uid   Device unique ID.
    * @param {string} name  Device name.
    * @param {State}  state State information
    * @returns {Info} Info object.
    * @constructor
    */
-  static forDimmable(name, state) {
-    return new Info(name, state, 'Dimmable Light', 'LWB007', '66012040');
+  static forDimmable(uid, name, state) {
+    return new Info(uid, name, state, 'Dimmable Light', 'LWB007', '66012040');
   }
 };

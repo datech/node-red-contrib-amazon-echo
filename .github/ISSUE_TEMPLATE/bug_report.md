@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 <!--- Verify first that your issue is not already reported on GitHub or documented in troubleshooting wiki page -->
 <!--- Complete *all* sections as described, this form is processed automatically -->
 
@@ -37,4 +46,3 @@ Example:
 
 ##### ACTUAL RESULTS
 <!--- Describe what actually happened. -->
-

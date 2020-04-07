@@ -108,7 +108,7 @@ module.exports = function(RED) {
 
       if (config.processinput > 0 && nodeDeviceId !== null) {
 
-        msg.payload.deviceid = formatUUID(nodeDeviceId);
+        var deviceid = formatUUID(nodeDeviceId);
 
         var meta = {
           insert: {
@@ -117,13 +117,13 @@ module.exports = function(RED) {
           }
         }
 
-        var deviceAttributes = setDeviceAttributes(msg.payload.deviceid, msg.payload, meta, hubNode.context());
+        var deviceAttributes = setDeviceAttributes(deviceid, msg.payload, meta, hubNode.context());
 
         // Output if
         // 'Process and output' OR
         // 'Process and output on state change' option is selected
         if (config.processinput == 2 || (config.processinput == 3 && Object.keys(deviceAttributes.meta.changes).length > 0)) {
-          payloadHandler(hubNode, msg.payload.deviceid);
+          payloadHandler(hubNode, deviceid);
         }
 
       }
@@ -197,17 +197,21 @@ module.exports = function(RED) {
     });
 
     app.get('/api/:username', function(req, res) {
-      const lights = getDevicesAttributes(hubNode.context()).map(d => {
+      const lights = getDevicesAttributes(hubNode.context()).reduce((l, d) => {
+        const uid = hueUniqueId(d.id);
         const state = new State(d.on, d.bri, d.hue, d.sat, d.ct, d.colormode);
         switch (d.devtype) {
           case '1': // Color Temperature Light.
-            return Info.forCT(d.name, state).extended().withCapabilities(Capabilities.forCT());
+            l[d.id] = Info.forCT(d.name, state).extended(uid).withCapabilities(Capabilities.forCT());
+            break;
           case '2': // Dimmable light.
-            return Info.forDimmable(d.name, state).extended().withCapabilities(Capabilities.forDimmable());
+            l[d.id] = Info.forDimmable(d.name, state).extended(uid).withCapabilities(Capabilities.forDimmable());
+            break;
           default: // Extended Color Light (default).
-            return Info.forRGBW(d.name, state).extended().withCapabilities(Capabilities.forRGBW());
+            l[d.id] = Info.forRGBW(d.name, state).extended(uid).withCapabilities(Capabilities.forRGBW());
         }
-      });
+        return l;
+      }, {});
 
       const output = new GlobalState(req.hostname, req.params.username).withLights(lights);
 
@@ -215,20 +219,21 @@ module.exports = function(RED) {
     });
 
     app.get('/api/:username/lights', function(req, res) {
-      const lights = getDevicesAttributes(hubNode.context()).map(d => {
+      const output = getDevicesAttributes(hubNode.context()).reduce((lights, d) => {
+        const uid = hueUniqueId(d.id);
         const state = new State(d.on, d.bri, d.hue, d.sat, d.ct, d.colormode);
         switch (d.devtype) {
           case '1': // Color Temperature Light.
-            return Info.forCT(d.name, state).extended().withCapabilities(Capabilities.forCT());
+            lights[d.id] = Info.forCT(d.name, state).extended(uid).withCapabilities(Capabilities.forCT());
+            break;
           case '2': // Dimmable light.
-            return Info.forDimmable(d.name, state).extended().withCapabilities(Capabilities.forDimmable());
+            lights[d.id] = Info.forDimmable(d.name, state).extended(uid).withCapabilities(Capabilities.forDimmable());
+            break;
           default: // Extended Color Light (default).
-            return Info.forRGBW(d.name, state).extended().withCapabilities(Capabilities.forRGBW());
+            lights[d.id] = Info.forRGBW(d.name, state).extended(uid).withCapabilities(Capabilities.forRGBW());
         }
-      });
-      const output = {
-          lights: lights
-      };
+        return lights;
+      }, {});
 
       res.json(output);
     });
@@ -361,6 +366,10 @@ module.exports = function(RED) {
     if (id === null || id === undefined)
       return '';
     return ('' + id).replace('.', '').trim();
+  }
+
+  function hueUniqueId(id) {
+    return (id + '0000').replace(/(.{2})/g, "$1:").substring(0, 23) + '-00';
   }
 
   function getHueHubId(config) {
