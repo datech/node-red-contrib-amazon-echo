@@ -20,7 +20,7 @@
     "hue",
     "emulator"
   ],
-  "author": "Steve Pike <steve@weebyte.com>",
+  "author": "oztourer <oztourer@weebyte.com>",
   "license": "MIT",
   "node-red": {
     "nodes": {
@@ -42,5 +42,12 @@
     "mocha": "^7.1.1",
     "should": "^8.4.0",
     "node-red-node-test-helper": "^0.2.3"
+  },
+  "bugs": {
+    "url": "https://github.com/oztourer/node-red-contrib-amazon-echo/issues"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   }
 }
