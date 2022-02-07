@@ -14,7 +14,7 @@
     <modelName>Philips hue bridge 2012</modelName>
     <modelNumber>1000000000000</modelNumber>
     <modelURL>http://www.meethue.com</modelURL>
-    <serialNumber>93eadbeef13</serialNumber>
+    <serialNumber>93deadbeef13</serialNumber>
     <UDN>uuid:{{ huehubid }}</UDN>
     <serviceList>
       <service>

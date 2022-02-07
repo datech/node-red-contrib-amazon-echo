@@ -2,6 +2,11 @@
 
 Alexa controlled Node-Red nodes supporting latest Amazon Echo devices
 
+> Forked from datech/node-red-contrib-amazon-echo to fix the length of
+> the Echo serial number. The Python code used by Home Assistant
+> expects a length of 12 or 16 bytes and generates constant error messages
+> if the length is incorrect.
+
 **NO Alexa Skills required.**
 
 **NO cloud dependencies.**
@@ -13,7 +18,7 @@ or
 
 Install using npm
 
-    $ npm install node-red-contrib-amazon-echo
+    $ npm install node-red-contrib-amazon-echo-oztourer
 
 ## How to use
   * Add **Amazon Echo Hub** node your flow
@@ -52,4 +57,4 @@ Amazon Echo Hub node is starting a service listening on port 80 which requires N
 Detailed troubleshooting instructions can be found on the [Wiki](https://github.com/datech/node-red-contrib-amazon-echo/wiki)
 
 ## Bugs and feature requests
-Please create an issue in [GitHub](https://github.com/datech/node-red-contrib-amazon-echo/issues)
+Please create an issue in [GitHub](https://github.com/oztourer/node-red-contrib-amazon-echo/issues)
