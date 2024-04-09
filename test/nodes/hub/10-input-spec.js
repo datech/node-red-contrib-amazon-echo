@@ -313,7 +313,7 @@ describe('Amazon Echo Hub', function() {
             msg.should.have.property("colormode", "hs");
             msg.should.have.property("hue", 7282);
             msg.should.have.property("sat", 96);
-            msg.should.have.property("xy").and.eql([0.4106395702541955, 0.41618602485898437]);
+            msg.should.have.property("xy").and.eql([0.4106395702541955, 0.4161860248589845]);
             msg.should.have.property("rgb").and.eql([255, 223, 159]);
             msg.should.have.property("ct", 199);
 
