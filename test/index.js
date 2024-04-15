@@ -18,7 +18,7 @@ describe('Amazon Echo Hub Node', function() {
     helper.unload();
   });
 
-  require('./nodes/hub/10-input_spec.js');
-  require('./nodes/hub/11-philips-hue_spec.js');
+  require('./nodes/hub/10-input-spec.js');
+  require('./nodes/hub/11-philips-hue-spec.js');
 
 });
