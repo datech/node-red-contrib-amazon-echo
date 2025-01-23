@@ -1,7 +1,7 @@
 var common = require("../../common.js");
 
 var request = common.request;
-var helper = common.helper;
+var nodeTestHelper = common.nodeTestHelper;
 var flow = common.flow;
 
 var amazonEchoHub = common.amazonEchoHub;
@@ -13,7 +13,7 @@ describe('Philips Hue REST API ', function() {
 
   it('description', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/description.xml')
@@ -34,7 +34,7 @@ describe('Philips Hue REST API ', function() {
 
   it('registration', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .post('/api')
@@ -59,7 +59,7 @@ describe('Philips Hue REST API ', function() {
 
   it('get state', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/api/c6260f982b43a226b5542b967f612ce')
@@ -80,7 +80,7 @@ describe('Philips Hue REST API ', function() {
 
   it('get lights', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/api/c6260f982b43a226b5542b967f612ce/lights')
@@ -101,7 +101,7 @@ describe('Philips Hue REST API ', function() {
 
   it('get light state', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         request(apiURL)
           .get('/api/c6260f982b43a226b5542b967f612ce/lights/00000000000002')
@@ -122,11 +122,11 @@ describe('Philips Hue REST API ', function() {
 
   it('switch off', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("000000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("000000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -174,11 +174,11 @@ describe('Philips Hue REST API ', function() {
 
   it('switch on', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("000000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("000000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -228,11 +228,11 @@ describe('Philips Hue REST API ', function() {
 
   it('brightness to 10%', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("000000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("000000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -285,11 +285,11 @@ describe('Philips Hue REST API ', function() {
 
   it('color to warm white', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("000000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("000000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -344,11 +344,11 @@ describe('Philips Hue REST API ', function() {
 
   it('HS color to cyan', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("000000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("000000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -414,11 +414,11 @@ describe('Philips Hue REST API ', function() {
 
   it('meta details', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("000000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("000000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {

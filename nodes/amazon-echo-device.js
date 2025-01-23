@@ -1,7 +1,7 @@
 module.exports = function(RED) {
   'use strict';
 
-  require('./lib/helpers.js')();
+  const helpers = require('./lib/helpers.js')();
 
   function AmazonEchoDeviceNode(config) {
     RED.nodes.createNode(this, config);
@@ -9,10 +9,10 @@ module.exports = function(RED) {
 
     deviceNode.on('input', function(msg) {
 
-      var nodeDeviceId = formatUUID(config.id);
+      var nodeDeviceId = helpers.formatUUID(config.id);
 
       if (nodeDeviceId == msg.deviceid) {
-        msg.topic = config.topic;
+        msg.topic = config.topic || msg.topic;
         deviceNode.send(msg);
       }
 
