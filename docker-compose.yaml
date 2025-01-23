@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  nodered:
+    image: "nodered/node-red:latest"
+    profiles: [node-red]
+    environment: {
+      # DEBUG: "node-ssdp:*"
+    }
+    ports:
+      - "1880:1880"
+    volumes:
+      - type: bind
+        source: data
+        target: /data
+      - type: bind
+        source: .
+        target: /node-red-contrib-amazon-echo
+    restart: unless-stopped
+    depends_on:
+      nodered-init: 
+        condition: service_completed_successfully
+
+  nodered-init:
+    image: "nodered/node-red:latest"
+    profiles: [node-red]
+    volumes:
+      - type: bind
+        source: data
+        target: /data
+      - type: bind
+        source: .
+        target: /node-red-contrib-amazon-echo
+    entrypoint: 
+      - "/bin/sh"
+      - "-c"
+      - |
+        cd /node-red-contrib-amazon-echo &&
+        mkdir -p dist &&
+        npm pack --pack-destination dist
+        npm install ./dist/node-red-contrib-amazon-echo-*.tgz --prefix /data
+    restart: "no"
+
+  test:
+    image: "nodered/node-red:latest"
+    profiles: [test]
+    volumes:
+      - type: bind
+        source: .
+        target: /node-red-contrib-amazon-echo
+    working_dir: /node-red-contrib-amazon-echo
+    entrypoint: 
+      - "/bin/sh"
+      - "-c"
+      - |
+        npm install && npm test
