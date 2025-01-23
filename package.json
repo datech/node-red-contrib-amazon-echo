@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-amazon-echo",
-  "version": "0.1.11",
-  "description": "Alexa controlled Node-Red nodes supporting latest Amazon Echo devices",
+  "version": "0.1.12",
+  "description": "Alexa-controlled Node-RED nodes for the latest Amazon Echo devices.",
   "main": "index.js",
   "homepage": "https://github.com/datech/node-red-contrib-amazon-echo",
   "repository": {
@@ -9,7 +9,9 @@
     "url": "git+https://github.com/datech/node-red-contrib-amazon-echo.git"
   },
   "scripts": {
-    "test": "mocha \"test/**/index.js\""
+    "test": "mocha \"test/**/index.js\"",
+    "docker:test": "mkdir -p data && docker compose --profile test up --abort-on-container-exit test",
+    "docker:node-red": "mkdir -p data && docker compose stop && docker compose --profile node-red up"
   },
   "keywords": [
     "node-red",
@@ -23,16 +25,19 @@
   "author": "Teodor Ivanov <npm@datech.org>",
   "license": "MIT",
   "node-red": {
+    "version": ">=3.0.0",
     "nodes": {
       "amazon-echo-device": "nodes/amazon-echo-device.js",
       "amazon-echo-hub": "nodes/amazon-echo-hub.js"
     }
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "body-parser": "^1.20.3",
+    "express": "^4.20.0",
     "hue-colors": "^0.5.3",
-    "ip": "^2.0.1",
     "mustache": "^4.2.0",
     "node-persist": "^4.0.1",
     "node-ssdp": "^4.0.0",
@@ -40,7 +45,8 @@
   },
   "devDependencies": {
     "mocha": "^10.4.0",
-    "node-red-node-test-helper": "^0.3.3",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "node-red": "^4.0.8",
+    "node-red-node-test-helper": "^0.3.3"
   }
 }

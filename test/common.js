@@ -1,5 +1,6 @@
 const request = require('supertest');
-const helper = require("node-red-node-test-helper");
+const helpers = require("../nodes/lib/helpers.js");
+const nodeTestHelper = require("node-red-node-test-helper");
 const amazonEchoHub = require("../nodes/amazon-echo-hub.js");
 const amazonEchoDevice = require("../nodes/amazon-echo-device.js");
 
@@ -39,7 +40,8 @@ var flow = [{
 ];
 
 exports.request = request;
-exports.helper = helper;
+exports.helpers = helpers;
+exports.nodeTestHelper = nodeTestHelper;
 exports.amazonEchoHub = amazonEchoHub;
 exports.amazonEchoDevice = amazonEchoDevice;
 exports.flow = flow;

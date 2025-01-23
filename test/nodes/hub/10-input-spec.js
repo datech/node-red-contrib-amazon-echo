@@ -1,7 +1,7 @@
 var common = require("../../common.js");
 
 var request = common.request;
-var helper = common.helper;
+var nodeTestHelper = common.nodeTestHelper;
 var flow = common.flow;
 
 var amazonEchoHub = common.amazonEchoHub;
@@ -13,11 +13,11 @@ describe('Amazon Echo Hub', function() {
 
   it('switch off', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -55,11 +55,11 @@ describe('Amazon Echo Hub', function() {
 
   it('switch on', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -99,11 +99,11 @@ describe('Amazon Echo Hub', function() {
 
   it('brightness to 10%', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -145,10 +145,10 @@ describe('Amazon Echo Hub', function() {
 
   it('color to warm white', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
 
         bulb.on("input", function(msg) {
           try {
@@ -193,11 +193,11 @@ describe('Amazon Echo Hub', function() {
 
   it('HS color to cyan', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -248,11 +248,11 @@ describe('Amazon Echo Hub', function() {
 
   it('XY color to cyan', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -301,11 +301,11 @@ describe('Amazon Echo Hub', function() {
 
   it('RGB color to cyan', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -354,11 +354,11 @@ describe('Amazon Echo Hub', function() {
 
   it('meta details', function(done) {
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {
@@ -393,15 +393,85 @@ describe('Amazon Echo Hub', function() {
     });
   });
 
+  it('input topic', function(done) {
+
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+      try {
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
+
+        hn.on("input", function(msg) {
+          try {
+            msg.should.have.property("topic", "input-topic");
+            msg.should.have.property("payload", "off");
+
+            done();
+
+          } catch (e) {
+            done(e);
+          }
+        });
+
+        hub.receive({
+          payload: {
+            nodeid: "00000000.000002",
+            on: false
+          },
+          topic: "input-topic"
+        });
+
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+
+  it('device topic', function(done) {
+
+    flow[2].topic = "device-topic";
+
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+      try {
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
+
+        hn.on("input", function(msg) {
+          try {
+            msg.should.have.property("topic", "device-topic");
+            msg.should.have.property("payload", "off");
+
+            done();
+
+          } catch (e) {
+            done(e);
+          }
+        });
+
+        hub.receive({
+          payload: {
+            nodeid: "00000000.000002",
+            on: false
+          },
+          topic: "input-topic"
+        });
+
+      } catch (e) {
+        done(e);
+      }
+    });
+  });
+
   it('should not process input', function(done) {
 
     flow[1].processinput = 0;
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         setTimeout(function() {
           done();
@@ -428,11 +498,11 @@ describe('Amazon Echo Hub', function() {
 
     flow[1].processinput = 1;
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           done("Unexpected message for the configured process input state");
@@ -467,12 +537,12 @@ describe('Amazon Echo Hub', function() {
 
     flow[1].processinput = 3;
 
-    helper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
+    nodeTestHelper.load([amazonEchoHub, amazonEchoDevice], flow, function() {
       try {
         var msgCount = 0;
-        var hub = helper.getNode("00000000.000001");
-        var bulb = helper.getNode("00000000.000002");
-        var hn = helper.getNode("00000000.0000f0");
+        var hub = nodeTestHelper.getNode("00000000.000001");
+        var bulb = nodeTestHelper.getNode("00000000.000002");
+        var hn = nodeTestHelper.getNode("00000000.0000f0");
 
         hn.on("input", function(msg) {
           try {

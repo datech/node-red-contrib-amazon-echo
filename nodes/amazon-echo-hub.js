@@ -1,7 +1,7 @@
 module.exports = function(RED) {
   'use strict';
 
-  require('./lib/helpers.js')();
+  const helpers = require('./lib/helpers.js')();
 
   const HueColor = require('hue-colors').default;
 
@@ -84,7 +84,7 @@ module.exports = function(RED) {
 
       if (config.processinput > 0 && nodeDeviceId !== null) {
 
-        var deviceid = formatUUID(nodeDeviceId);
+        var deviceid = helpers.formatUUID(nodeDeviceId);
 
         var meta = {
           insert: {
@@ -99,7 +99,7 @@ module.exports = function(RED) {
         // 'Process and output' OR
         // 'Process and output on state change' option is selected
         if (config.processinput == 2 || (config.processinput == 3 && Object.keys(deviceAttributes.meta.changes).length > 0)) {
-          payloadHandler(hubNode, deviceid);
+          payloadHandler(hubNode, deviceid, msg.topic);
         }
 
       }
@@ -158,7 +158,7 @@ module.exports = function(RED) {
       var data = {
         address: req.hostname,
         port: req.connection.localPort,
-        huehubid: getHueHubId(config)
+        huehubid: helpers.getHueHubId(config)
       };
 
       var output = Mustache.render(template, data);
@@ -190,7 +190,7 @@ module.exports = function(RED) {
         username: req.params.username,
         date: new Date().toISOString().split('.').shift(),
         uniqueid: function() {
-          return hueUniqueId(this.id);
+          return helpers.hueUniqueId(this.id);
         }
       }
 
@@ -210,7 +210,7 @@ module.exports = function(RED) {
         lights: getDevicesAttributes(hubNode.context()),
         date: new Date().toISOString().split('.').shift(),
         uniqueid: function() {
-          return hueUniqueId(this.id);
+          return helpers.hueUniqueId(this.id);
         }
       }
 
@@ -282,7 +282,7 @@ module.exports = function(RED) {
           port: port,
           path: '/description.xml'
         },
-        udn: 'uuid:' + getHueHubId(config)
+        udn: 'uuid:' + helpers.getHueHubId(config)
       })
 
     server.addUSN('upnp:rootdevice');
@@ -292,7 +292,7 @@ module.exports = function(RED) {
   }
 
   //
-  // Helpers
+  // helperss
   //
   function getOrDefault(key, defaultValue, context) {
 
@@ -323,7 +323,7 @@ module.exports = function(RED) {
     RED.nodes.eachNode(function(node) {
       if (node.type == 'amazon-echo-device') {
         devices.push({
-          id: formatUUID(node.id),
+          id: helpers.formatUUID(node.id),
           name: node.name
         });
       }
@@ -441,11 +441,14 @@ module.exports = function(RED) {
   //
   // Handlers
   //
-  function payloadHandler(hubNode, deviceId) {
+  function payloadHandler(hubNode, deviceId, topic = null) {
 
     var msg = getDeviceAttributes(deviceId, hubNode.context());
     msg.deviceid = deviceId;
-    msg.topic = '';
+
+    if (topic !== null) {
+      msg.topic = topic;
+    }
 
     hubNode.send(msg);
   }

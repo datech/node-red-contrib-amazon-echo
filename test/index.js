@@ -1,21 +1,21 @@
-var common = require("./common.js");
+const common = require("./common.js");
 
-var helper = common.helper;
+const nodeTestHelper = common.nodeTestHelper;
 
-helper.init(require.resolve('node-red'));
+nodeTestHelper.init(require.resolve('node-red'));
 
 describe('Amazon Echo Hub Node', function() {
 
   before(function(done) {
-    helper.startServer(done);
+    nodeTestHelper.startServer(done);
   });
 
   after(function(done) {
-    helper.stopServer(done);
+    nodeTestHelper.stopServer(done);
   });
 
   afterEach(function() {
-    helper.unload();
+    nodeTestHelper.unload();
   });
 
   require('./nodes/hub/10-input-spec.js');
