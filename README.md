@@ -25,6 +25,8 @@ $ npm install node-red-contrib-amazon-echo
 - **Note:** Use unique names for device nodes. Alexa will use the node name to manage your smart device.
 - Ask **"Alexa, discover devices"** or start the discovery procedure from the Alexa mobile app.
 
+![Usage screenshot](https://raw.githubusercontent.com/datech/node-red-contrib-amazon-echo/master/docs/images/how-to-use.png "Alexa controlled Node-Red nodes")
+
 ## Features
 
 - Turning on/off
