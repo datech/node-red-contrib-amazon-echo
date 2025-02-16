@@ -27,18 +27,40 @@
 </script>
 
 <script type="text/x-red" data-template-name="amazon-echo-hub">
-  <style media="screen">
+    <style media="screen">
       .form-row label {
-        width: 140px;
+        width: 140px !important;
+        max-width: 40% !important;
       }
       .form-row input,
       .form-row select {
-        width: 260px;
+        width: 260px !important;
+        max-width: 50% !important;
+        margin-left: 20px !important;
+      }
+      .form-row.spaced,
+      .form-tips.spaced {
+        margin-top: 30px;
+      }
+      .form-row.supported-by {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        text-align: left;
+      }
+      .form-row.supported-by > div {
+        width: 150px;
+        text-align: left
+      }
+      .form-row.supported-by img {
+        width: 150px;
+        height: auto;
+        margin-top: 5px;
       }
     </style>
-    <div class="form-row">
+    <div class="form-row spaced">
         <label for="node-input-port"><i class="fa fa-globe"></i> Port</label>
-        <input type="text" id="node-input-port" placeholder="80">
+        <input type="text" id="node-input-port" placeholder="80" style="">
     </div>
     <div class="form-row">
         <label for="node-input-processinput"><i class="fa fa-tag"></i> Process Input</label>
@@ -51,16 +73,24 @@
     </div>
     <div class="form-row">
       <label for="node-input-discovery"><i class="fa fa-search"></i> Device discovery</label>
-      <input type="checkbox" id="node-input-discovery">
+      <input type="checkbox" id="node-input-discovery" style="max-width: 1rem !important;">
     </div>
-    <div class="form-tips">
-      Tips:
-      <p>
-        <ul>
-          <li>Set port to <strong>80</strong> if you have latest generation Amazon Echo devices.</li>
-          <li>Set process input if you want to send signal to Amazon Echo Hub.</li>
-        </ul>
-      </p>
+    <div class="form-tips spaced">
+      <small>
+        Tips:
+          <ul>
+            <li>Set the port to <strong>80</strong> if you have the latest-generation Amazon Echo devices.</li>
+            <li>Enable <strong>process input</strong> if you want to send a signal to the Amazon Echo Hub.</li>
+          </ul>
+      </small>
+    </div>
+    <div class="form-row spaced supported-by">
+      <div>
+        <small>Supported by:</small>
+      </div>
+      <a href="https://github.com/datech/node-red-contrib-amazon-echo/issues/202" target="_blank">
+          <img src="icons/node-red-contrib-amazon-echo/supported-by.svg" alt="Supported by: DuloNode">
+      </a>
     </div>
 </script>
 
@@ -106,6 +136,9 @@
 
   <h3>Outputs</h3>
   <dl class="message-properties">
+     <dt>deviceid <span class="property-type">string</span></dt>
+     <dd>Device ID</dd>
+
      <dt>payload <span class="property-type">string</span></dt>
      <dd>State of the light (on, off)</dd>
 

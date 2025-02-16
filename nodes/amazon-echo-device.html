@@ -22,13 +22,30 @@
 </script>
 
 <script type="text/x-red" data-template-name="amazon-echo-device">
-  <div class="form-row">
+  <style media="screen">
+    .form-row label {
+      width: 140px !important;
+      max-width: 40% !important;
+    }
+    .form-row input,
+    .form-row select {
+      width: 260px !important;
+      max-width: 50% !important;
+      margin-left: 20px !important;
+    }
+    .form-row.spaced,
+    .form-tips.spaced {
+      margin-top: 30px;
+    }
+  </style>
+  <div class="form-row spaced">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Bedroom light">
+        <input type="text" id="node-input-name" placeholder="Device Name (must be unique)">
     </div>
-    <div class="form-tips">Alexa uses this <strong>Name</strong> to indentify your device by voice. This has to be unique for each device. If you have renamed your device, please ask Alexa to discover again.</div>
-    <p></p>
-    <div class="form-row">
+    <div class="form-tips">
+      <small>Alexa uses this <strong>Name</strong> to identify your device by voice. It must be unique for each device. If you rename your device, please ask Alexa to discover it again.</small>
+    </div>
+    <div class="form-row spaced">
         <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
         <input type="text" id="node-input-topic">
     </div>
@@ -39,6 +56,12 @@
 
   <h3>Outputs</h3>
   <dl class="message-properties">
+     <dt>deviceid <span class="property-type">string</span></dt>
+     <dd>Device ID</dd>
+
+     <dt>devicename <span class="property-type">string</span></dt>
+     <dd>Device Name</dd>
+     
      <dt>payload <span class="property-type">string</span></dt>
      <dd>On state of the light (on - true, off - false)</dd>
 

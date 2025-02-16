@@ -13,6 +13,7 @@ module.exports = function(RED) {
 
       if (nodeDeviceId == msg.deviceid) {
         msg.topic = config.topic || msg.topic;
+        msg.devicename = deviceNode.name;
         deviceNode.send(msg);
       }
 
