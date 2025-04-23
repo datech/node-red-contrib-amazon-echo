@@ -1,5 +1,17 @@
 # node-red-contrib-amazon-echo
 
+## ❗️Important
+
+As of 2025, **node-red-contrib-amazon-echo** remains a solid module for integrating Node-RED with Alexa — especially for those who prefer a local solution with no cloud dependencies. However, its support is mostly limited to basic devices like lights and switches, which has become a major limitation for more complex smart home setups.
+
+That’s exactly what motivated me to create the next-generation [Node-RED Alexa](https://www.dulonode.com) integration — **DuloNode**. Built around the Alexa Smart Home Skill, **DuloNode** supports a much broader range of devices, including thermostats, blinds, locks, TVs, speakers, garage doors, fans, scenes, and more. It also unlocks advanced features like temperature control, volume adjustment, TV channel switching, and seamless automation flows — all from within Node-RED.
+
+**Get started with more interesting and complex smart home flows using the Node-RED Alexa integration guide here:**  
+[https://www.dulonode.com/docs/getting-started/](https://www.dulonode.com/docs/getting-started/)
+
+
+## Node-RED Contrib Amazon Echo module 
+
 Alexa controlled Node-Red nodes supporting the latest Amazon Echo devices
 
 **NO Alexa Skills required.**
@@ -59,9 +71,3 @@ Detailed troubleshooting instructions can be found on the [Wiki](https://github.
 ## Bugs and feature requests
 
 Please create an issue on [GitHub](https://github.com/datech/node-red-contrib-amazon-echo/issues).
-
-## More device types
-
-**node-red-contrib-amazon-echo** supports only basic device types like lights, switches, and dimmable bulbs. If you need a broader range of smart home devices, including thermostats, TVs, speakers, locks, blinds, garage doors, fans, and scenes, you might try **[DuloNode](https://www.dulonode.com)**.
-
-**DuloNode** extends functionality beyond what node-red-contrib-amazon-echo offers by supporting more device categories and additional features like temperature control, TV channel changes, adjusting speaker volume, locking doors, raising blinds, and more advanced automation. It provides a comprehensive smart home integration experience for users looking for extended capabilities.
