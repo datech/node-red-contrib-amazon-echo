@@ -1,0 +1,156 @@
+[
+    {
+        "id": "81b594b4e9295d93",
+        "type": "tab",
+        "label": "Basic Example",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bd91a59fb6bed541",
+        "type": "amazon-echo-hub",
+        "z": "81b594b4e9295d93",
+        "port": "80",
+        "processinput": "3",
+        "discovery": true,
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "744a5417df98d47e",
+                "f7ab4af6a36a2b7f",
+                "2838136de2c5b69f"
+            ]
+        ]
+    },
+    {
+        "id": "744a5417df98d47e",
+        "type": "amazon-echo-device",
+        "z": "81b594b4e9295d93",
+        "name": "Bedroom LED",
+        "topic": "",
+        "x": 620,
+        "y": 160,
+        "wires": [
+            [
+                "92c5949b3cb60eca"
+            ]
+        ]
+    },
+    {
+        "id": "f7ab4af6a36a2b7f",
+        "type": "amazon-echo-device",
+        "z": "81b594b4e9295d93",
+        "name": "Kitchen lights",
+        "topic": "",
+        "x": 620,
+        "y": 220,
+        "wires": [
+            [
+                "92c5949b3cb60eca"
+            ]
+        ]
+    },
+    {
+        "id": "2838136de2c5b69f",
+        "type": "amazon-echo-device",
+        "z": "81b594b4e9295d93",
+        "name": "Ceiling fan",
+        "topic": "",
+        "x": 610,
+        "y": 280,
+        "wires": [
+            [
+                "ed67c07f7d7adf19"
+            ]
+        ]
+    },
+    {
+        "id": "92c5949b3cb60eca",
+        "type": "mqtt out",
+        "z": "81b594b4e9295d93",
+        "name": "",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "x": 790,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "ed67c07f7d7adf19",
+        "type": "http request",
+        "z": "81b594b4e9295d93",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "",
+        "persist": false,
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 810,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "93cc6556ba0d0791",
+        "type": "inject",
+        "z": "81b594b4e9295d93",
+        "name": "Turn On Kitchen",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"nodename\":\"Kitchen lights\",\"on\":true}",
+        "payloadType": "json",
+        "x": 160,
+        "y": 180,
+        "wires": [
+            [
+                "bd91a59fb6bed541"
+            ]
+        ]
+    },
+    {
+        "id": "0b0783faa9c32356",
+        "type": "inject",
+        "z": "81b594b4e9295d93",
+        "name": "Turn Off Kitchen",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"nodename\":\"Kitchen lights\",\"on\":false}",
+        "payloadType": "json",
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "bd91a59fb6bed541"
+            ]
+        ]
+    }
+]
