@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-amazon-echo",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Alexa-controlled Node-RED nodes for the latest Amazon Echo devices.",
   "main": "index.js",
   "homepage": "https://github.com/datech/node-red-contrib-amazon-echo",
@@ -41,7 +41,7 @@
     "hue-colors": "^0.5.3",
     "mustache": "^4.2.0",
     "node-persist": "^4.0.1",
-    "node-ssdp": "^4.0.0",
+    "node-ssdp": "^4.0.1",
     "stoppable": "^1.0.4"
   },
   "devDependencies": {

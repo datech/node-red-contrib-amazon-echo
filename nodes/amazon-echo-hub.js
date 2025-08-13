@@ -180,6 +180,33 @@ module.exports = function(RED) {
       res.json(output);
     });
 
+    app.get('/api/nouser/config', function(req, res) {
+      var template = fs.readFileSync(apiTemplateDir + '/nouser/config.json', 'utf8').toString();
+
+      var data = {
+      };
+
+      var output = Mustache.render(template, data);
+      output = JSON.parse(output);
+
+      res.json(output);
+    });
+
+    app.get('/api/:username/config', function(req, res) {
+      var template = fs.readFileSync(apiTemplateDir + '/config.json', 'utf8').toString();
+
+      var data = {
+        address: req.hostname,
+        username: req.params.username,
+        date: new Date().toISOString().split('.').shift()
+      };
+
+      var output = Mustache.render(template, data);
+      output = JSON.parse(output);
+
+      res.json(output);
+    });
+
     app.get('/api/:username', function(req, res) {
       var lightsTemplate = fs.readFileSync(apiTemplateDir + '/lights/all.json', 'utf8').toString();
       var template = fs.readFileSync(apiTemplateDir + '/state.json', 'utf8').toString();
@@ -282,8 +309,16 @@ module.exports = function(RED) {
           port: port,
           path: '/description.xml'
         },
-        udn: 'uuid:' + helpers.getHueHubId(config)
+        udn: 'uuid:' + helpers.getHueHubId(config),
+        ssdpSig: 'FreeRTOS/7.4.2 UPnP/1.0 IpBridge/1.16.0',
+        ssdpTtl: 2,
+        explicitSocketBind: true
       })
+
+    server._extraHeaders = Object.assign({}, server._extraHeaders, {
+      'hue-bridgeid': 'AABBCCDDFF001122',
+      'CACHE-CONTROL': 'max-age=100'
+    });
 
     server.addUSN('upnp:rootdevice');
     server.addUSN('urn:schemas-upnp-org:device:basic:1');

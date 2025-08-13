@@ -4,6 +4,7 @@ services:
   nodered:
     image: "nodered/node-red:latest"
     profiles: [node-red]
+    # user: root
     environment: {
       # DEBUG: "node-ssdp:*"
     }
@@ -17,6 +18,7 @@ services:
         source: .
         target: /node-red-contrib-amazon-echo
     restart: unless-stopped
+    # network_mode: host
     depends_on:
       nodered-init: 
         condition: service_completed_successfully
@@ -24,6 +26,7 @@ services:
   nodered-init:
     image: "nodered/node-red:latest"
     profiles: [node-red]
+    # user: root
     volumes:
       - type: bind
         source: data

@@ -1,0 +1,11 @@
+{
+    "name": "Philips hue",
+    "datastoreversion": "59",
+    "swversion": "01043155",
+    "apiversion": "1.16.0",      
+    "mac":"00:00:00:aa:bb:cc",
+    "bridgeid": "AABBCCDDFF001122",
+    "factorynew": false,
+    "replacesbridgeid": null,
+    "modelid": "BSB001"
+}
