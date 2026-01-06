@@ -1,14 +1,21 @@
 # node-red-contrib-amazon-echo
 
-## ❗️Important
+## ❗️Important (2026): Alexa local discovery is unreliable / may not work
 
-As of 2025, **node-red-contrib-amazon-echo** remains a solid module for integrating Node-RED with Alexa — especially for those who prefer a local solution with no cloud dependencies. However, its support is mostly limited to basic devices like lights and switches, which has become a major limitation for more complex smart home setups.
+As of **2026**, users continue to report **unstable or broken Alexa connectivity** with `node-red-contrib-amazon-echo`, including:
+- Devices not being discovered reliably (or at all)
+- Previously discovered devices disappearing or showing **“Device not responding”**
+- Voice commands sometimes executing with a delay while Alexa reports an error
 
-That’s exactly what motivated me to create the next-generation [Node-RED Alexa](https://www.dulonode.com) integration — **DuloNode**. Built around the Alexa Smart Home Skill, **DuloNode** supports a much broader range of devices, including thermostats, blinds, locks, TVs, speakers, garage doors, fans, scenes, and more. It also unlocks advanced features like temperature control, volume adjustment, TV channel switching, and seamless automation flows — all from within Node-RED.
+This module relies on **local Philips Hue Bridge (v1) emulation** for Alexa discovery and control. Since **August 2025**, changes on Amazon’s side appear to have affected this approach.
 
-**Get started with more interesting and complex smart home flows using the Node-RED Alexa integration guide here:**  
-[https://www.dulonode.com/docs/getting-started/](https://www.dulonode.com/docs/getting-started/)
+For detailed analysis, community findings, and historical context, see:
+- GitHub issue: **“Device not responding – August 2025”** [#210](https://github.com/datech/node-red-contrib-amazon-echo/issues/210)
 
+### Alternatives
+If you require a **stable and future-proof Alexa - Node-RED integration**, consider:
+- Community-maintained alternatives listed at **https://www.voicenodes.com**
+- **[DuloNode](https://www.dulonode.com/)** - an Alexa Smart Home Skill-based solution **created by the author of `node-red-contrib-amazon-echo`**
 
 ## Node-RED Contrib Amazon Echo module 
 
