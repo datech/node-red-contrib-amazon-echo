@@ -452,7 +452,7 @@ module.exports = function(RED) {
     }
 
     // Set brightness percentage
-    current.percentage = Math.floor(current.bri / 254 * 100);
+    current.percentage = Math.round(current.bri / 254 * 100);
 
     // Populate meta.changes
     for (var key in saved) {
