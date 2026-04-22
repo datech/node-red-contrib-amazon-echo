@@ -356,12 +356,15 @@ module.exports = function(RED) {
     var devices = [];
 
     RED.nodes.eachNode(function(node) {
-      if (node.type == 'amazon-echo-device') {
-        devices.push({
-          id: helpers.formatUUID(node.id),
-          name: node.name
-        });
-      }
+      if (node.type !== 'amazon-echo-device') return;
+
+      // deaktivierte einzelne Nodes ignorieren
+      if (node.disabled === true || node.d === true) return;
+
+      devices.push({
+        id: helpers.formatUUID(node.id),
+        name: node.name
+      });
     });
 
     return devices;
