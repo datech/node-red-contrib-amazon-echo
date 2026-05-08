@@ -10,13 +10,11 @@ module.exports = function(RED) {
     RED.nodes.createNode(this, config);
     var hubNode = this;
 
-    var port = config.port > 0 && config.port < 65536 ? config.port : 80;
+    var listenPort = config.port > 0 && config.port < 65536 ? Number(config.port) : 80;
+    var advertisePort = 80;
 
     // Start SSDP service
-    var ssdpServer = ssdp(port, config);
-    if (config.discovery) {
-      ssdpServer.start();
-    }
+    var ssdpServer = null;
 
     // Stoppable kill the server on deploy
     const graceMilliseconds = 500;
@@ -29,13 +27,13 @@ module.exports = function(RED) {
       hubNode.status({
         fill: 'red',
         shape: 'ring',
-        text: 'Unable to start on port ' + port
+        text: 'Unable to start on port ' + listenPort
       });
       RED.log.error(error);
       return;
     });
 
-    httpServer.listen(port, function(error) {
+    httpServer.listen(listenPort, function(error) {
 
       if (error) {
         hubNode.status({
@@ -54,7 +52,12 @@ module.exports = function(RED) {
       });
 
       // REST API Settings
-      api(app, hubNode, config);
+      api(app, hubNode, config, advertisePort);
+
+      ssdpServer = ssdp(advertisePort, config);
+      if (config.discovery) {
+        ssdpServer.start();
+      }
     });
 
     hubNode.on('input', function(msg) {
@@ -107,7 +110,7 @@ module.exports = function(RED) {
 
     hubNode.on('close', function(removed, doneFunction) {
       // Stop SSDP server
-      ssdpServer.stop();
+      if (ssdpServer) ssdpServer.stop();
 
       // Stop HTTP server
       httpServer.stop(function() {
@@ -127,7 +130,7 @@ module.exports = function(RED) {
   //
   // REST API
   //
-  function api(app, hubNode, config) {
+  function api(app, hubNode, config, advertisePort) {
 
     const Mustache = require('mustache');
 
@@ -157,7 +160,7 @@ module.exports = function(RED) {
 
       var data = {
         address: req.hostname,
-        port: req.connection.localPort,
+        port: advertisePort,
         huehubid: helpers.getHueHubId(config)
       };
 
@@ -301,18 +304,17 @@ module.exports = function(RED) {
   //
   // SSDP
   //
-  function ssdp(port, config) {
+  function ssdp(advertisePort, config) {
 
     var ssdpService = require('node-ssdp').Server,
       server = new ssdpService({
         location: {
-          port: port,
+          port: advertisePort,
           path: '/description.xml'
         },
         udn: 'uuid:' + helpers.getHueHubId(config),
         ssdpSig: 'FreeRTOS/7.4.2 UPnP/1.0 IpBridge/1.16.0',
-        ssdpTtl: 2,
-        explicitSocketBind: true
+        ssdpTtl: 2
       })
 
     server._extraHeaders = Object.assign({}, server._extraHeaders, {
