@@ -56,9 +56,57 @@ module.exports = function(RED) {
 
       ssdpServer = ssdp(advertisePort, config);
       if (config.discovery) {
-        ssdpServer.start();
+        startSsdpWithRetry();
       }
     });
+
+    // ssdpServer.start() can reject (e.g. "No sockets available, cannot start")
+    // if no non-internal network interface is available yet, which happens
+    // routinely right after a cold boot before the network stack is fully up.
+    // Without a retry, this leaves the node permanently unable to advertise
+    // itself for the rest of the process's life - it never tries again on its
+    // own, and the failure is an unhandled rejection that bypasses Node-RED's
+    // own error handling entirely, so it's easy to miss.
+    //
+    // node-ssdp (as of 4.0.1) also has its own bug that a naive retry runs
+    // straight into: SsdpServer.prototype.start sets this._socketBound = true
+    // *before* the bind is confirmed, and never resets it on failure. The
+    // underlying SSDP.prototype._start likewise leaves this.sockets set to a
+    // (possibly empty) object rather than null after a failed
+    // _createSockets(). The result is that every start() call after the first
+    // failure hits the "already running" early-return and resolves undefined -
+    // a silent false success that never actually binds a socket. So a retry
+    // has to reset both flags itself before trying again.
+    function startSsdpWithRetry() {
+      var attempts = 0;
+      var maxAttempts = 8;
+      var retryDelayMs = 4000;
+
+      attempt();
+
+      function attempt() {
+        attempts++;
+        Promise.resolve(ssdpServer.start()).then(function() {
+          hubNode.status({ fill: 'green', shape: 'dot', text: 'online' });
+          RED.log.info('amazon-echo-hub: SSDP started (attempt ' + attempts + '/' + maxAttempts + ')');
+        }).catch(function(error) {
+          var message = error && error.message ? error.message : error;
+          if (attempts < maxAttempts) {
+            hubNode.status({ fill: 'yellow', shape: 'ring', text: 'SSDP retry ' + attempts + '/' + maxAttempts });
+            RED.log.warn('amazon-echo-hub: SSDP start failed (attempt ' + attempts + '/' + maxAttempts + '): ' + message + ' - retrying in ' + (retryDelayMs / 1000) + 's');
+            // Work around node-ssdp leaving stale state behind on a failed
+            // start (see comment above) so the next attempt actually retries
+            // socket creation instead of silently no-oping.
+            ssdpServer._socketBound = false;
+            ssdpServer.sockets = null;
+            setTimeout(attempt, retryDelayMs);
+          } else {
+            hubNode.status({ fill: 'red', shape: 'ring', text: 'SSDP failed to start' });
+            RED.log.error('amazon-echo-hub: SSDP failed to start after ' + maxAttempts + ' attempts: ' + message);
+          }
+        });
+      }
+    }
 
     hubNode.on('input', function(msg) {
 
