@@ -56,9 +56,52 @@ module.exports = function(RED) {
 
       ssdpServer = ssdp(advertisePort, config);
       if (config.discovery) {
-        ssdpServer.start();
+        startSsdpWithRetry();
       }
     });
+
+    // Retry SSDP start on failure (e.g., network not ready after cold boot).
+    // Reset node-ssdp internal state before retry to work around library bug
+    // where failed starts leave stale flags preventing actual retry attempts.
+    function startSsdpWithRetry() {
+      var attempts = 0;
+      var maxAttempts = 8;
+      var retryDelayMs = 4000;
+
+      attempt();
+
+      function attempt() {
+        attempts++;
+        Promise.resolve(ssdpServer.start()).then(function() {
+          hubNode.status({
+            fill: 'green',
+            shape: 'dot',
+            text: 'online'
+          });
+        }).catch(function(error) {
+          var message = error && error.message ? error.message : error;
+          if (attempts < maxAttempts) {
+            hubNode.status({
+              fill: 'yellow',
+              shape: 'ring',
+              text: 'SSDP retrying'
+            });
+            RED.log.warn('SSDP start failed, retry ' + attempts + '/' + maxAttempts + ': ' + message);
+            // Reset stale node-ssdp state to allow actual retry
+            ssdpServer._socketBound = false;
+            ssdpServer.sockets = null;
+            setTimeout(attempt, retryDelayMs);
+          } else {
+            hubNode.status({
+              fill: 'red',
+              shape: 'ring',
+              text: 'SSDP failed to start'
+            });
+            RED.log.error('SSDP failed to start after ' + maxAttempts + ' attempts: ' + message);
+          }
+        });
+      }
+    }
 
     hubNode.on('input', function(msg) {
 
