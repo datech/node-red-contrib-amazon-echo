@@ -146,6 +146,7 @@ module.exports = function(RED) {
   //
   function api(app, hubNode, config) {
 
+    const HUE_API_USERNAME = 'c6260f982b43a226b5542b967f612ce';
     const Mustache = require('mustache');
 
     var fs = require('fs');
@@ -187,7 +188,7 @@ module.exports = function(RED) {
       var template = fs.readFileSync(__dirname + '/api/hue/templates/registration.json', 'utf8').toString();
 
       var data = {
-        username: 'c6260f982b43a226b5542b967f612ce'
+        username: HUE_API_USERNAME
       };
 
       var output = Mustache.render(template, data);
@@ -258,6 +259,17 @@ module.exports = function(RED) {
     });
 
     app.put('/api/:username/lights/:id/state', function(req, res) {
+
+      if (req.params.username !== HUE_API_USERNAME) {
+        res.status(401).json([{
+          error: {
+            type: 1,
+            address: req.path,
+            description: 'unauthorized user'
+          }
+        }]);
+        return;
+      }
 
       var meta = {
         insert: {
